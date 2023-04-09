@@ -17,6 +17,17 @@ def pid(hub, tank, cm):
         steer = (0-hub.motion_sensor.get_yaw_angle())*GSPK 
         tank.start(int(steer),30)
     tank.stop()
+    
+hub = PrimeHub()
+hub.motion_sensor.reset_yaw_angle()
+
+robot = MotorPair('F', 'B')
+robot.set_default_speed(50)
+robot.set_motor_rotation(22.1, 'cm')
+
+flipper = Motor('D')
+flipper.set_stop_action('hold')
+
 '''
 DO NOT CHANGE
 '''
