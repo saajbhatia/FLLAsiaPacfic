@@ -10,7 +10,7 @@ def pid(hub, robot, cm, speed):
     motor.set_degrees_counted(0)
     start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
-    degrees_needed = abs(cm)/0.0613888889
+    degrees_needed = abs(cm) * 360/22.1
     print(degrees_needed)
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
@@ -37,7 +37,10 @@ DO NOT CHANGE
 '''
 
 flipper.run_for_degrees(90, 30)
-robot.move(round(33*30/360, 2), 'cm', 100, 15)
+robot.move(round(44*30/360, 2), 'cm', 100, 15)
 pid(hub, robot, 0.25, 30)
-robot.move(round(33*-30/360, 2), 'cm', 100, 15)
+robot.move(round(44*-30/360, 2), 'cm', 100, 15)
 pid(hub, robot, 42, 30)
+for i in range(3):
+    flipper.run_for_degrees(-20, 30)
+    flipper.run_for_degrees(20, 30)
