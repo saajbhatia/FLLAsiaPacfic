@@ -20,3 +20,9 @@ def pid(hub, tank, cm):
 '''
 DO NOT CHANGE
 '''
+
+flipper.run_for_degrees(90, 30)
+robot.move(round(33*30/360, 2), 'cm', 100, 15)
+pid(hub, robot, 0.25, 30)
+robot.move(round(33*-30/360, 2), 'cm', 100, 15)
+pid(hub, robot, 42, 30)
