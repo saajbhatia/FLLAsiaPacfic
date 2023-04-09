@@ -1,6 +1,7 @@
 '''
 DO NOT CHANGE
 '''
+
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
@@ -17,6 +18,17 @@ def pid(hub, tank, cm):
         steer = (0-hub.motion_sensor.get_yaw_angle())*GSPK 
         tank.start(int(steer),30)
     tank.stop()
+
+hub = PrimeHub()
+hub.motion_sensor.reset_yaw_angle()
+
+robot = MotorPair('F', 'B')
+robot.set_motor_rotation(22.1, 'cm')
+
+flipper = Motor('D')
+flipper.set_stop_action('hold')
+
 '''
 DO NOT CHANGE
 '''
+
