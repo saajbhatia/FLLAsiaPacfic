@@ -32,3 +32,22 @@ flipper.set_stop_action('hold')
 DO NOT CHANGE
 '''
 
+flipper.run_for_degrees(90, 30)
+
+#Go forward and do TV mission, then come back
+pid(hub, robot, 23.5, 30)
+pid(hub, robot, 19.75, -30)
+
+#Turn to Car, Go to car, Do Car
+turnDegrees(robot, -37)
+pid(hub, robot, 79, 30)
+flipper.run_for_degrees(-90, 30)
+
+pid(hub, robot, 20, -30)
+turnDegrees(robot, 79)
+flipper.run_for_degrees(90, 30)
+pid(hub,robot, 15, 30)
+
+for i in range(3):
+    pid(hub,robot, 10, 15)
+    pid(hub,robot, 10, -15)
