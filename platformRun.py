@@ -36,11 +36,11 @@ flipper.set_stop_action('hold')
 DO NOT CHANGE
 '''
 
-flipper.run_for_degrees(90, 30)
+#flipper.run_for_degrees(90, 30)
 robot.move(round(44*30/360, 2), 'cm', 100, 15)
-pid(hub, robot, 0.25, 30)
+pid(hub, robot, 0.2, 30)
 robot.move(round(44*-30/360, 2), 'cm', 100, 15)
 pid(hub, robot, 42, 30)
 for i in range(3):
-    flipper.run_for_degrees(-20, 30)
-    flipper.run_for_degrees(20, 30)
+    flipper.run_for_degrees(-50, 30)
+    flipper.run_for_degrees(50, 30)
