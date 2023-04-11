@@ -5,10 +5,10 @@ from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, Motio
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
 
-def pid(hub, robot, cm, speed):
+def pid(hub, robot, cm, speed, start_angle):
     motor = Motor('F')
     motor.set_degrees_counted(0)
-    start_angle = hub.motion_sensor.get_yaw_angle()
+    #start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm)/0.0613888889
     print(degrees_needed)
@@ -18,7 +18,7 @@ def pid(hub, robot, cm, speed):
         robot.start(int(steer),speed)
         wait_for_seconds(0.5)
     robot.stop()
-    
+
 hub = PrimeHub()
 hub.motion_sensor.reset_yaw_angle()
 
@@ -28,6 +28,10 @@ robot.set_motor_rotation(22.1, 'cm')
 
 flipper = Motor('D')
 flipper.set_stop_action('hold')
+
+#Power Plant Mission
+pid(hub, robot, 46, 40, 0)
+flipper.run_for_degrees(-60, 50)
 
 '''
 DO NOT CHANGE
