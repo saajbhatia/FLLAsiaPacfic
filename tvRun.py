@@ -6,18 +6,23 @@ from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, Motio
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
 
-def pid(hub, tank, cm):
+def pid(hub, robot, cm, speed):
     motor = Motor('F')
     motor.set_degrees_counted(0)
+    start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
-    degrees_needed = cm/0.0613888889
+    degrees_needed = abs(cm) * 360/22.1
     print(degrees_needed)
-    while abs(motor.get_degrees_counted())<=degrees_needed: 
-        print(motor.get_degrees_counted())
-        GSPK = 1.4 
-        steer = (0-hub.motion_sensor.get_yaw_angle())*GSPK 
-        tank.start(int(steer),30)
-    tank.stop()
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        GSPK = 1.7
+        steer = (start_angle-hub.motion_sensor.get_yaw_angle())*GSPK
+        robot.start(int(steer),speed)
+        wait_for_seconds(0.1)
+    robot.stop()
+
+def abs_turning(hub, robot, deg, speed):
+    for i in range(5):
+        robot.move(33*(deg-hub.motion_sensor.get_yaw_angle())/360, 'cm', 100, speed)
 
 hub = PrimeHub()
 hub.motion_sensor.reset_yaw_angle()
@@ -32,22 +37,39 @@ flipper.set_stop_action('hold')
 DO NOT CHANGE
 '''
 
-flipper.run_for_degrees(90, 30)
+def tv():
+    flipper.run_for_degrees(90, 30)
 
-#Go forward and do TV mission, then come back
-pid(hub, robot, 23.5, 30)
-pid(hub, robot, 19.75, -30)
+    #Go forward and do TV mission, then come back
+    pid(hub, robot, 23.5, 30)
+    pid(hub, robot, 19.75, -30)
 
-#Turn to Car, Go to car, Do Car
-turnDegrees(robot, -37)
-pid(hub, robot, 79, 30)
-flipper.run_for_degrees(-90, 30)
+def car():
+    #Turn to Car, Go to car, Do Car
+    turnDegrees(robot, -37)
+    pid(hub, robot, 79, 30)
+    flipper.run_for_degrees(-90, 30)
 
-pid(hub, robot, 20, -30)
-turnDegrees(robot, 79)
-flipper.run_for_degrees(90, 30)
-pid(hub,robot, 15, 30)
+    pid(hub, robot, 20, -30)
+    turnDegrees(robot, 79)
+    flipper.run_for_degrees(90, 30)
+    pid(hub,robot, 15, 30)
 
-for i in range(3):
-    pid(hub,robot, 10, 15)
-    pid(hub,robot, 10, -15)
+def windmill():
+    for i in range(3):
+        pid(hub,robot, 10, 15)
+        pid(hub,robot, 10, -15)
+
+def check_angle(ang):
+    if hub.motion_sensor.get_yaw_angle() >= ang:
+        return
+
+def testing():
+    flipper.run_for_degrees(95, 30)
+    pid(hub, robot, 21, 30)
+    pid(hub, robot, 26, -30)
+    abs_turning(hub, robot, -47, 15)
+    pid(hub, robot, 93, 30)
+    abs_turning(hub, robot, -10, 10)
+    flipper.run_for_degrees(-95, 30)
+testing()
