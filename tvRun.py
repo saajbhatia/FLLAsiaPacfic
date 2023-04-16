@@ -27,10 +27,10 @@ def calDiff(curr, correct):
         return correct - (curr + 360)
     else:
         return correct - curr
-        
+
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 25.5
+    distOfWheels = 37
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
@@ -106,5 +106,5 @@ def mainMissions():
     pid(hub, robot, 60, 80)
 
 startTime = time.time()
-pid(hub, robot, 30, 50)
+pid(hub, robot, 30, 40)
 print(time.time()-startTime)
