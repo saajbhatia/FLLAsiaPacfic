@@ -7,12 +7,12 @@ from spike.control import wait_for_seconds, wait_until, Timer
 import math
 import time
 
-def pid(hub, robot, cm, speed, start_angle):
+def pid(hub, robot, cm, speed):
     motor = Motor('F')
     motor.set_degrees_counted(0)
-    #start_angle = hub.motion_sensor.get_yaw_angle()
+    start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
-    degrees_needed = abs(cm) * 360/22.1
+    degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
         steer = (start_angle-hub.motion_sensor.get_yaw_angle())*GSPK
@@ -20,13 +20,22 @@ def pid(hub, robot, cm, speed, start_angle):
         #wait_for_seconds(0.1)
     robot.stop()
 
+def calDiff(curr, correct):
+    if curr - correct > 180:
+        return correct - (curr - 360)
+    elif curr - correct < -180:
+        return correct - (curr + 360)
+    else:
+        return correct - curr
+        
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 11 * math.pi
-    robot.move(distOfWheels*(deg-hub.motion_sensor.get_yaw_angle())/360, 'cm', 100, speed)
+    distOfWheels = 25.5
+    calDiff(hub.motion_sensor.get_yaw_angle(), deg)
+    robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
-        robot.move(distOfWheels*(deg-hub.motion_sensor.get_yaw_angle())/360, 'cm', 100, 20)
-        if deg-hub.motion_sensor.get_yaw_angle() == 0:
+        robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
+        if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
             break
     print('Total time is', time.time()-startTime)
 
@@ -35,7 +44,7 @@ def __init__():
     hub.motion_sensor.reset_yaw_angle()
 
     robot = MotorPair('F', 'B')
-    robot.set_motor_rotation(22.1, 'cm')
+    robot.set_motor_rotation(17.5, 'cm')
 
     flipper = Motor('D')
     flipper.set_stop_action('hold')
@@ -43,7 +52,6 @@ def __init__():
     return hub, robot, flipper
 
 hub, robot, flipper = __init__()
-
 '''
 DO NOT CHANGE
 '''
@@ -97,9 +105,6 @@ def mainMissions():
     abs_turning(hub, robot, 155, 20)
     pid(hub, robot, 60, 80)
 
-print('*****************')
-
-
-currentTime = time.time()
-mainMissions()
-print(time.time()-currentTime)
+startTime = time.time()
+pid(hub, robot, 30, 50)
+print(time.time()-startTime)
