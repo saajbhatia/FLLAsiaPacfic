@@ -34,14 +34,45 @@ robot.set_default_speed(50)
 flipper = Motor('D')
 back_flipper = Motor('A')
 def mission():
-    pid(hub, robot, 54, 50, 0)
-    flipper.run_for_degrees(90,-90)
-    abs_turning(hub, robot, 5, 40)
-    pid(hub, robot, 8, 30, 5)
-    flipper.run_for_degrees(90,20)
-    abs_turning(hub, robot, 0, 40)
-    pid(hub, robot, 63, -50, 0)
+    
+    #Go to pwr plant OG val 53.75 then 52.5 then 47 and lift bar
+    pid(hub, robot, 53, 30, 0)
+    flipper.run_for_degrees(80,-90)
 
+    #Turn right 35
+    abs_turning(hub, robot, 34, 10)
+    pid(hub, robot, 13, 15, 34)
+
+    #Turn back to 0 b4 pushing thing down then push down
+    abs_turning(hub, robot, 0, 10)
+    flipper.run_for_degrees(90, 90)
+
+    #Go HOME 
+    pid(hub, robot, 75, -30, 0)
+    abs_turning(hub, robot, 45, 10)
+    
+    '''
+    abs_turning(hub, robot, -8, 20)
+    flipper.run_for_degrees(90,-90)
+
+    #Turn back after lifting pwr plant thingy
+    abs_turning(hub, robot, 0, 20)
+    
+    #Go forward and push down pwr plant thingy
+    pid(hub, robot, 8, 20, 0)
+    flipper.run_for_degrees(110,20)
+    #abs_turning(hub, robot, 0, 40)
+
+    #Go back and turn 45deg
+    #abs_turning(hub, robot, 20, 0)
+    print(hub.motion_sensor.get_yaw_angle())
+    print("Is that vegan?")
+    pid(hub, robot, 63, -20, 0)
+    abs_turning(hub, robot, 0, 20)
+    return
+    
+    abs_turning(hub, robot, 20, 45)
+    '''
 
 currentTime = time.time()
 mission()
