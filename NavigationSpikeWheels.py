@@ -1,15 +1,16 @@
 '''
 DO NOT CHANGE
 '''
+
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
 import math
 import time
 
-def pid(hub, robot, cm, speed):
+def pid(hub, robot, cm, speed, start_angle):
     motor = Motor('F')
     motor.set_degrees_counted(0)
-    start_angle = hub.motion_sensor.get_yaw_angle()
+    #start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed:
@@ -29,7 +30,7 @@ def calDiff(curr, correct):
         
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 25.5
+    distOfWheels = 38.25
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
