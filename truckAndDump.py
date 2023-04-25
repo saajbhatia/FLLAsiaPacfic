@@ -1,21 +1,23 @@
+'''
+DO NOT CHANGE
+'''
+
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
+from math import *
 import math
 import time
 
 def pid(hub, robot, cm, speed, start_angle):
-    #pid(hub, robot, 100, 45, 45)
     motor = Motor('F')
     motor.set_degrees_counted(0)
     #start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
-
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
-        steer = (start_angle-hub.motion_sensor.get_yaw_angle())*GSPK
-        if cm == 100:
-            print(motor.get_degrees_counted(), degrees_needed, steer, hub.motion_sensor.get_yaw_angle(), start_angle)
+        calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
@@ -30,7 +32,7 @@ def calDiff(curr, correct):
 
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 25.5
+    distOfWheels = 38.25
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
@@ -49,16 +51,44 @@ def __init__():
     flipper = Motor('D')
     flipper.set_stop_action('hold')
 
-    return hub, robot, flipper
+    back_flipper = Motor('A')
+    return hub, robot, flipper, back_flipper
 
-hub, robot, flipper = __init__()
+hub, robot, flipper, back_flipper = __init__()
+def waitUntilTap(hub):
+    while True:
+        if hub.motion_sensor.wait_for_new_gesture() == 'freefall':
+            print('freefall')
+            break 
 
-# flipper.run_for_rotations(0.05, -5)
-# flipper.run_for_rotations(0.01, -5)
-flipper.run_for_degrees(15, -20)
-time.sleep(0.5)
-pid(hub, robot, 22, 50, 0)
-flipper.run_for_degrees(25, 30)
-#abs_turning(hub, robot, -7, 50)
+'''
+DO NOT CHANGE
+'''
 
-pid(hub, robot, 35, -50, 0)
+def truck():
+    pid(hub, robot, 25.5, 30, 0)
+    pid(hub, robot, 40, -30, 0)
+
+    abs_turning(hub, robot, 45, 50)
+    flipper.run_for_rotations(-0.25)
+
+def dump():
+    waitUntilTap(hub)
+    pid(hub, robot, 38, 50, 45)
+    abs_turning(hub, robot, 0, 10)
+    pid(hub, robot, 48, 50, 0)
+    flipper.run_for_rotations(0.12, 50)
+    pid(hub, robot, 5, -50, 0)
+    flipper.run_for_rotations(0.1)
+    pid(hub, robot, 300, -50, 0)
+    abs_turning(hub, robot, -90, 20)
+    pid(hub, robot, 20, -50, -90)
+
+print('************')
+
+currentTime = time.time()
+
+truck()
+dump()
+
+print(time.time()-currentTime)
