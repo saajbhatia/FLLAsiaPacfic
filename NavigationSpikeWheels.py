@@ -55,6 +55,11 @@ def __init__():
     return hub, robot, flipper, back_flipper
 
 hub, robot, flipper, back_flipper = __init__()
+def waitUntilTap(hub):
+    while True:
+        if hub.motion_sensor.wait_for_new_gesture() == 'freefall':
+            print('freefall')
+            break 
 
 '''
 DO NOT CHANGE
