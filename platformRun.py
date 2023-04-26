@@ -62,16 +62,16 @@ DO NOT CHANGE
 
 startTime = time.time()
 def plat():
-    back_flipper.run_for_degrees(35, 60)
+    back_flipper.run_for_degrees(160, 40)
     flipper.run_for_degrees(160, 90)
     pid(hub, robot, 51, 50, 0)
-    #flipping platforn run
+    #flipping platform run
     for i in range(3):
         flipper.run_for_rotations(-0.1, 80)
         flipper.run_for_rotations(0.1, 80)
     back_flipper.run_for_degrees(-70, 45)
     abs_turning(hub, robot, 38, 50)
-    flipper.run_for_degrees(-120, 90)
+    flipper.run_for_degrees(-140, 90)
     pid(hub, robot, 36, 50, 38)
     abs_turning(hub, robot, 90, 50)
     #back flip goes down to collect cylinders
@@ -82,12 +82,11 @@ def plat():
     back_flipper.run_for_degrees(-10, 50)
     pid(hub, robot, 21, -50, 180)
     pid(hub, robot, 21, 50, 180)
-    flipper.run_for_degrees(110, 90)
+    abs_turning(hub, robot, 195, 50)
+    flipper.run_for_degrees(130, 90)
     abs_turning(hub, robot, 150, 50)
-
 def test():
-    abs_turning(hub, robot, 180, 50)
-    print('Done')
-    pid(hub, robot, 100, 30, 180)
+    back_flipper.run_for_degrees(160, 40)
+
 plat()
 print(time.time()-startTime)
