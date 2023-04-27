@@ -9,6 +9,7 @@ import math
 import time
 
 def pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
     #start_angle = hub.motion_sensor.get_yaw_angle()
@@ -16,8 +17,10 @@ def pid(hub, robot, cm, speed, start_angle):
     degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
-        calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        print(steer)
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
@@ -57,8 +60,7 @@ def __init__():
 hub, robot, flipper, back_flipper = __init__()
 def waitUntilTap(hub):
     while True:
-        if hub.motion_sensor.wait_for_new_gesture() == 'freefall':
-            print('freefall')
+        if hub.motion_sensor.wait_for_new_gesture() == 'tapped':
             break
 
 '''
