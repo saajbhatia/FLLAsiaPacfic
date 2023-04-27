@@ -66,3 +66,73 @@ def waitUntilTap(hub):
 '''
 DO NOT CHANGE
 '''
+
+def mission():
+
+    flipper.run_for_degrees(18,-70)
+
+    #Go to pwr plant OG val 53.75 then 52.5 then 47 and lift bar
+    pid(hub, robot, 52.5, 70, 0)
+    flipper.run_for_degrees(80,-90)
+
+    #Turn right 35
+    abs_turning(hub, robot, 35, 70)
+    pid(hub, robot, 8, 70, 34)
+
+    #Turn back to 0 b4 pushing thing down then push down
+    abs_turning(hub, robot, 0, 70)
+    flipper.run_for_degrees(90, 90)
+    flipper.run_for_degrees(-5, -75)
+    #Go HOME
+    pid(hub, robot, 71, -60, 0)
+    abs_turning(hub, robot, 90, 0)
+
+    #Tv mission go forward and come back
+    pid(hub, robot, 28, 40, 90)
+    pid(hub, robot, 24, -40, 90)
+
+    #Turn to do factory
+    abs_turning(hub, robot, 45, 60)
+    waitUntilTap(hub)
+
+    #Setup
+    flipper.run_for_degrees(-140, 30)
+
+    #Dump + Grab
+    pid(hub, robot, 75, 70, 45)
+    flipper.run_for_degrees(140, 30)
+    pid(hub, robot, 14, 70, 45)
+
+    #Car
+    abs_turning(hub, robot, 75, 45)
+    flipper.run_for_degrees(-140, 30)
+    abs_turning(hub, robot, 45, 45)
+    pid(hub, robot, 28, -45, 45)
+    abs_turning(hub, robot, 137, 45)
+
+    #Windmill
+    flipper.run_for_degrees(140, 30)
+    pid(hub, robot, 15, 70, 137)
+    abs_turning(hub, robot, 137, 45)
+    for i in range(3):
+        pid(hub, robot, 11.5, 30, 137)
+        pid(hub, robot, 10.5, -30, 137)
+        wait_for_seconds(0.5)
+
+    #Put units on floor
+    abs_turning(hub, robot, -44, 45)
+    flipper.run_for_degrees(-140, 30)
+
+    #Go home
+    abs_turning(hub, robot, -105, 45)
+    pid(hub, robot, 55, 70, -115)
+
+    #Align for dino
+    abs_turning(hub, robot, 0, 45)
+
+def test():
+    pid(hub, robot, 200, -70, 0)
+
+currentTime = time.time()
+mission()
+print(time.time()-currentTime)
