@@ -4,22 +4,20 @@ DO NOT CHANGE
 
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
+from math import *
 import math
 import time
 
 def pid(hub, robot, cm, speed, start_angle):
-    #pid(hub, robot, 100, 45, 45)
     motor = Motor('F')
     motor.set_degrees_counted(0)
     #start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
-    
     while abs(motor.get_degrees_counted())<=degrees_needed:
-        GSPK = 1.7
-        steer = (start_angle-hub.motion_sensor.get_yaw_angle())*GSPK
-        if cm == 100:
-            print(motor.get_degrees_counted(), degrees_needed, steer, hub.motion_sensor.get_yaw_angle(), start_angle)
+        GSPK = 1
+        calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
@@ -31,7 +29,7 @@ def calDiff(curr, correct):
         return correct - (curr + 360)
     else:
         return correct - curr
-        
+
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
     distOfWheels = 38.25
@@ -41,7 +39,7 @@ def abs_turning(hub, robot, deg, speed):
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
         if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
             break
-    #print('Total time is', time.time()-startTime)
+    print('Total time is', time.time()-startTime)
 
 def __init__():
     hub = PrimeHub()
@@ -53,51 +51,82 @@ def __init__():
     flipper = Motor('D')
     flipper.set_stop_action('hold')
 
-    return hub, robot, flipper
+    back_flipper = Motor('A')
+    return hub, robot, flipper, back_flipper
 
-hub, robot, flipper = __init__()
+hub, robot, flipper, back_flipper = __init__()
+def waitUntilTap(hub):
+    while True:
+        if hub.motion_sensor.wait_for_new_gesture() == 'freefall':
+            print('freefall')
+            break
 
 '''
 DO NOT CHANGE
 '''
 
-startTime = time.time()
+def mission():
 
-#Setup
-flipper.run_for_degrees(-140, 30)
-abs_turning(hub, robot, 45, 45)
+    flipper.run_for_degrees(18,-50)
 
-#Dump + Grab
-pid(hub, robot, 75, 50, 45)
-flipper.run_for_degrees(140, 30)
-pid(hub, robot, 21, 50, 45)
+    #Go to pwr plant OG val 53.75 then 52.5 then 47 and lift bar
+    pid(hub, robot, 53, 50, 0)
+    flipper.run_for_degrees(80,-90)
 
-#Car
-abs_turning(hub, robot, 69, 45)
-flipper.run_for_degrees(-140, 30)
-abs_turning(hub, robot, 45, 45)
-pid(hub, robot, 28, -45, 45)
-abs_turning(hub, robot, 137, 45)
+    #Turn right 35
+    abs_turning(hub, robot, 35, 50)
+    pid(hub, robot, 10, 50, 34)
 
-#Windmill
-flipper.run_for_degrees(140, 30)
-pid(hub, robot, 15, 50, 137)
-abs_turning(hub, robot, 137, 45)
-for i in range(3):
-    pid(hub, robot, 11.5, 30, 137)
-    pid(hub, robot, 10.5, -30, 137)
-    wait_for_seconds(0.5)
+    #Turn back to 0 b4 pushing thing down then push down
+    abs_turning(hub, robot, 0, 50)
+    flipper.run_for_degrees(90, 90)
+    flipper.run_for_degrees(-5, -75)
+    #Go HOME
+    pid(hub, robot, 71, -60, 0)
+    abs_turning(hub, robot, 90, 0)
 
-#Put units on floor
-abs_turning(hub, robot, -44, 45)
-flipper.run_for_degrees(-140, 30)
+    #Tv mission go forward and come back
+    pid(hub, robot, 30, 40, 90)
+    pid(hub, robot, 24, -40, 90)
 
-#Go home
-abs_turning(hub, robot, -105, 45)
-pid(hub, robot, 55, 50, -115)
+    #Turn to do factory
+    abs_turning(hub, robot, 45, 60)
 
-#Align for dino
-abs_turning(hub, robot, 0, 45)
+    #Setup
+    flipper.run_for_degrees(-140, 30)
 
-print(time.time()-startTime)
-print('***********')
+    #Dump + Grab
+    pid(hub, robot, 75, 50, 45)
+    flipper.run_for_degrees(140, 30)
+    pid(hub, robot, 21, 50, 45)
+
+    #Car
+    abs_turning(hub, robot, 69, 45)
+    flipper.run_for_degrees(-140, 30)
+    abs_turning(hub, robot, 45, 45)
+    pid(hub, robot, 28, -45, 45)
+    abs_turning(hub, robot, 137, 45)
+
+    #Windmill
+    flipper.run_for_degrees(140, 30)
+    pid(hub, robot, 15, 50, 137)
+    abs_turning(hub, robot, 137, 45)
+    for i in range(3):
+        pid(hub, robot, 11.5, 30, 137)
+        pid(hub, robot, 10.5, -30, 137)
+        wait_for_seconds(0.5)
+
+    #Put units on floor
+    abs_turning(hub, robot, -44, 45)
+    flipper.run_for_degrees(-140, 30)
+
+    #Go home
+    abs_turning(hub, robot, -105, 45)
+    pid(hub, robot, 55, 50, -115)
+
+    #Align for dino
+    abs_turning(hub, robot, 0, 45)
+
+currentTime = time.time()
+mission()
+print(time.time()-currentTime)
