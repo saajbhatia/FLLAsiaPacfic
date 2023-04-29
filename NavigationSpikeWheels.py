@@ -83,5 +83,6 @@ def waitUntilTap(hub):
         if hub.motion_sensor.wait_for_new_gesture() == 'tapped':
             break
 
+hub, robot, flipper, back_flipper = __init__()
 
 
