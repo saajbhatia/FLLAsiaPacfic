@@ -8,12 +8,36 @@ import time
 def pid(hub, robot, cm, speed, start_angle):
     motor = Motor('F')
     motor.set_degrees_counted(0)
-    degrees_needed = abs(cm) * 360/22.1
+    degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
-        steer = (start_angle-hub.motion_sensor.get_yaw_angle())*GSPK
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
         robot.start(int(steer),speed)
-    print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - start_angle) + " degrees.")
+    #print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - start_angle) + " degrees.")
+    robot.stop()
+
+def highspeed_pid(hub, robot, cm, speed, start_angle):
+    motor = Motor('F')
+    motor.set_degrees_counted(0)
+    degrees_needed = abs(cm) * 360/17.8
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        robot.start(int(steer),speed)
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
+    #print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - start_angle) + " degrees.")
     robot.stop()
 
 #Used for absolute turning
@@ -34,7 +58,7 @@ def abs_turning(hub, robot, deg, speed):
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
         if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
             break
-    print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - deg) + " degrees.")
+    #print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - deg) + " degrees.")
 
 #Setting up the motors
 def __init__():
@@ -65,18 +89,16 @@ print(" ")
 '''
 DO NOT CHANGE
 '''
-#Start
-pid(hub, robot, 70, -30, 0)
 
+highspeed_pid(hub, robot, 15, 80, 0)
 abs_turning(hub, robot, 45, 50)
-
-pid(hub, robot, 50, -30, 45)
-
-abs_turning(hub, robot, 138, 30)
-
-pid(hub, robot, 13.5, 50, 138)
-
-back_flipper.run_for_degrees(90, -60)
-
-#End
-print("Time took to run program was: " + str(time.time()-startTime) + " seconds.")
+highspeed_pid(hub, robot, 75, 80, 45)
+abs_turning(hub, robot, 90, 50)
+highspeed_pid(hub, robot, 25, 80, 90)
+abs_turning(hub, robot, 135, 30)
+pid(hub, robot, 9, 40, 135)
+pid(hub, robot, 4, -40, 135)
+abs_turning(hub, robot, 225, 30)
+pid(hub, robot, 2, 30, 225)
+flipper.run_for_degrees(25, 10)
+pid(hub, robot, 10, -40, 225)
