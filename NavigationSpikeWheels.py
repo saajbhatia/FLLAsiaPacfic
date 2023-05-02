@@ -1,3 +1,6 @@
+'''
+DO NOT CHANGE
+'''
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
@@ -16,7 +19,7 @@ def pid(hub, robot, cm, speed, start_angle):
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
-        print(steer)
+        #print(steer)
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
@@ -33,7 +36,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
-        print(steer)
+        #print(steer)
         robot.start(int(steer),speed)
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
@@ -45,6 +48,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
             robot.start(int(steer), -30)
         else:
             robot.start(int(steer), 30)
+        #wait_for_seconds(0.1)
     robot.stop()
 
 def calDiff(curr, correct):
@@ -64,8 +68,12 @@ def abs_turning(hub, robot, deg, speed):
         if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
             break
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
-        
+
     print('Total time is', time.time()-startTime)
+
+def fast_turning(hub, robot, deg, speed):
+    distOfWheels = 38.0
+    robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
 
 def __init__():
     hub = PrimeHub()
@@ -87,4 +95,6 @@ def waitUntilTap(hub):
 
 hub, robot, flipper, back_flipper = __init__()
 
-
+'''
+DO NOT CHANGE
+'''
