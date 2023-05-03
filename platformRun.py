@@ -1,7 +1,6 @@
 '''
 DO NOT CHANGE
 '''
-
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
@@ -9,6 +8,7 @@ import math
 import time
 
 def pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
     #start_angle = hub.motion_sensor.get_yaw_angle()
@@ -16,9 +16,38 @@ def pid(hub, robot, cm, speed, start_angle):
     degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
-        calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        #print(steer)
         robot.start(int(steer),speed)
+        #wait_for_seconds(0.1)
+    robot.stop()
+
+def highspeed_pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
+    motor = Motor('F')
+    motor.set_degrees_counted(0)
+    #start_angle = hub.motion_sensor.get_yaw_angle()
+    #Degrees needed per centimeter * centimers needed = degrees_needed
+    degrees_needed = abs(cm) * 360/17.8
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        #print(steer)
+        robot.start(int(steer),speed)
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        print(steer)
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
         #wait_for_seconds(0.1)
     robot.stop()
 
@@ -32,14 +61,19 @@ def calDiff(curr, correct):
 
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 38.25
+    distOfWheels = 38.0
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
-        robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
         if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
             break
+        robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
+
     print('Total time is', time.time()-startTime)
+
+def fast_turning(hub, robot, deg, speed):
+    distOfWheels = 38.0
+    robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
 
 def __init__():
     hub = PrimeHub()
@@ -54,12 +88,12 @@ def __init__():
     back_flipper = Motor('A')
     return hub, robot, flipper, back_flipper
 
-hub, robot, flipper, back_flipper = __init__()
 def waitUntilTap(hub):
     while True:
-        if hub.motion_sensor.wait_for_new_gesture() == 'freefall':
-            print('freefall')
+        if hub.motion_sensor.wait_for_new_gesture() == 'tapped':
             break
+
+hub, robot, flipper, back_flipper = __init__()
 
 '''
 DO NOT CHANGE
@@ -68,7 +102,7 @@ DO NOT CHANGE
 startTime = time.time()
 def plat():
     back_flipper.run_for_degrees(160, 40)
-    flipper.run_for_degrees(160, 90)
+    flipper.run_for_degrees(80, 90)
     pid(hub, robot, 51, 50, 0)
     #flipping platform run
     for i in range(3):
@@ -93,5 +127,21 @@ def plat():
 def test():
     back_flipper.run_for_degrees(160, 40)
 
-plat()
+def dino_run():
+    highspeed_pid(hub, robot, 129, 80, 0)
+    fast_turning(hub, robot, 40, 50)
+    flipper.run_for_degrees(80, 90)
+    fast_turning(hub, robot, 0, 50)
+    highspeed_pid(hub, robot, 45, 80, 0)
+    wait_for_seconds(1.5)
+    highspeed_pid(hub, robot, 19, -80, 0)
+    fast_turning(hub, robot, 90, 50)
+    highspeed_pid(hub, robot, 25, -80, 90)
+    flipper.run_for_degrees(-80, 90)
+    hub.motion_sensor.reset_yaw_angle()
+    plat()
+
+
+
+dino_run()
 print(time.time()-startTime)
