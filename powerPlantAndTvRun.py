@@ -101,28 +101,33 @@ DO NOT CHANGE
 
 def mission():
 
+    #Tv mission go forward and come back
+    pid(hub, robot, 30.5, 50, 0)
+    pid(hub, robot, 37.5, -50, 0)
+    abs_turning(hub, robot, -90, 30)
+    abs_turning(hub, robot, -90, 5)
+    
+
     flipper.run_for_degrees(18,-50)
 
     #Go to pwr plant OG val 53.75 then 52.5 then 47 and lift bar
-    highspeed_pid(hub, robot, 53, 80, 0)
+    highspeed_pid(hub, robot, 59, 50, -90)
+    hub.motion_sensor.reset_yaw_angle()
     flipper.run_for_degrees(80,-90)
 
     #Turn right 35
     abs_turning(hub, robot, 30, 50)
-    pid(hub, robot, 10, 30, 35)
+    pid(hub, robot, 6, 30, 35)
 
     #Turn back to 0 b4 pushing thing down then push down
     abs_turning(hub, robot, 0, 50)
+    pid(hub, robot, 3, 30, 0)
     flipper.run_for_degrees(90, 50)
     flipper.run_for_degrees(-5, -50)
 
     #Go HOME
-    highspeed_pid(hub, robot, 71, -80, 0)
-    fast_turning(hub, robot, 90, 30)
+    highspeed_pid(hub, robot, 78, -80, 0)
 
-    #Tv mission go forward and come back
-    pid(hub, robot, 31, 50, 90)
-    pid(hub, robot, 27, -50, 90)
     flipper.run_for_degrees(-140, 50)
     waitUntilTap(hub)
 
@@ -133,7 +138,7 @@ def mission():
     #Dump + Grab
     highspeed_pid(hub, robot, 75, 80, 45)
     flipper.run_for_degrees(140, 50)
-    pid(hub, robot, 8, 80, 45)
+    pid(hub, robot, 20, 80, 45)
     time.sleep(0.1)
 
     #Car
@@ -155,7 +160,7 @@ def mission():
         pid(hub, robot, 10.5, 30, 137)
         wait_for_seconds(0.5)
         pid(hub, robot, 9.75, -30, 137)
-        
+
 
     #Put units on floor
     fast_turning(hub, robot, 0, 50)
