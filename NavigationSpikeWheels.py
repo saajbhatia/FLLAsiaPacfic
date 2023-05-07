@@ -73,7 +73,10 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         if speed < 0:
             steer *= -1
         #print(steer)
-        robot.start(int(steer),30)
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 2.5
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
