@@ -23,7 +23,7 @@ def pid(hub, robot, cm, speed, start_angle):
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
-def old_highspeed_pid(hub, robot, cm, speed, start_angle):
+def highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
@@ -39,14 +39,12 @@ def old_highspeed_pid(hub, robot, cm, speed, start_angle):
             robot.start(int(steer), -30)
         else:
             robot.start(int(steer), 30)
-        #print(steer)
         robot.start(int(steer),speed)
-    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.6:
         GSPK = 1.7
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
-        #print(steer)
         robot.start(int(steer),speed)
     while abs(motor.get_degrees_counted())<=degrees_needed:
         GSPK = 1.7
@@ -60,8 +58,8 @@ def old_highspeed_pid(hub, robot, cm, speed, start_angle):
             robot.start(int(steer), 30)
         #wait_for_seconds(0.1)
     robot.stop()
-    
-def highspeed_pid(hub, robot, cm, speed, start_angle):
+
+def old_highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
@@ -135,3 +133,4 @@ hub, robot, flipper, back_flipper = __init__()
 '''
 DO NOT CHANGE
 '''
+old_highspeed_pid(hub, robot, 100, 80, 0)
