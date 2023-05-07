@@ -23,7 +23,7 @@ def pid(hub, robot, cm, speed, start_angle):
         robot.start(int(steer),speed)
         #wait_for_seconds(0.1)
     robot.stop()
-def highspeed_pid(hub, robot, cm, speed, start_angle):
+def old_highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
@@ -61,7 +61,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         #wait_for_seconds(0.1)
     robot.stop()
     
-def old_highspeed_pid(hub, robot, cm, speed, start_angle):
+def highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
