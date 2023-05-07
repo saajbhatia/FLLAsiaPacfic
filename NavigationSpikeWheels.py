@@ -83,10 +83,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         if speed < 0:
             steer *= -1
         print(steer)
-        if speed < 0:
-            robot.start(int(steer), -speed)
-        else:
-            robot.start(int(steer), speed)
+        robot.start(int(steer), speed)
         #wait_for_seconds(0.1)
     robot.stop()
 
