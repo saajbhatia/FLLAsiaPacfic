@@ -24,6 +24,41 @@ def pid(hub, robot, cm, speed, start_angle):
         #wait_for_seconds(0.1)
     robot.stop()
     
+def highspeed_pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
+    motor = Motor('F')
+    motor.set_degrees_counted(0)
+    #start_angle = hub.motion_sensor.get_yaw_angle()
+    #Degrees needed per centimeter * centimers needed = degrees_needed
+    degrees_needed = abs(cm) * 360/17.8
+    GSPK = 1.7
+
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.15:    
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
+        robot.start(int(steer),speed)
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.70:
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        robot.start(int(steer),speed)
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        if speed < 0:
+            steer *= -1
+        print(steer)
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
+        #wait_for_seconds(0.1)
+    robot.stop()
+
 def old_highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
@@ -32,43 +67,7 @@ def old_highspeed_pid(hub, robot, cm, speed, start_angle):
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
     while abs(motor.get_degrees_counted())<=degrees_needed*0.2:
-        GSPK = 2.5
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
-        if speed < 0:
-            steer *= -1
-        if speed < 0:
-            robot.start(int(steer), -50)
-        else:
-            robot.start(int(steer), 50)
-        robot.start(int(steer),speed)
-    while abs(motor.get_degrees_counted())<=degrees_needed*0.6:
-        GSPK = 1.7
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
-        if speed < 0:
-            steer *= -1
-        robot.start(int(steer),speed)
-    while abs(motor.get_degrees_counted())<=degrees_needed:
-        GSPK = 2.5
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
-        if speed < 0:
-            steer *= -1
-        print(steer)
-        if speed < 0:
-            robot.start(int(steer), -50)
-        else:
-            robot.start(int(steer), 50)
-        #wait_for_seconds(0.1)
-    robot.stop()
-
-def highspeed_pid(hub, robot, cm, speed, start_angle):
-    print('*******************')
-    motor = Motor('F')
-    motor.set_degrees_counted(0)
-    #start_angle = hub.motion_sensor.get_yaw_angle()
-    #Degrees needed per centimeter * centimers needed = degrees_needed
-    degrees_needed = abs(cm) * 360/17.8
-    while abs(motor.get_degrees_counted())<=degrees_needed*0.2:
-        GSPK = 1.7
+        GSPK = 1
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
@@ -78,7 +77,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         else:
             robot.start(int(steer), 30)
     while abs(motor.get_degrees_counted())<=degrees_needed:
-        GSPK = 2.5
+        GSPK = 1
         steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
