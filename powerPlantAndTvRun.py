@@ -102,52 +102,55 @@ DO NOT CHANGE
 def mission():
 
     #Tv mission go forward and come back
-    pid(hub, robot, 30.5, 50, 0)
-    pid(hub, robot, 37.5, -50, 0)
+    highspeed_pid(hub, robot, 27.5, 70, 0)
+    pid(hub, robot, 41, -50, 0)
     abs_turning(hub, robot, -90, 30)
-    abs_turning(hub, robot, -90, 5)
-    
+
 
     flipper.run_for_degrees(18,-50)
 
     #Go to pwr plant OG val 53.75 then 52.5 then 47 and lift bar
-    highspeed_pid(hub, robot, 59, 50, -90)
+    highspeed_pid(hub, robot, 58.25, 50, -90)
     hub.motion_sensor.reset_yaw_angle()
     flipper.run_for_degrees(80,-90)
 
     #Turn right 35
     abs_turning(hub, robot, 30, 50)
-    pid(hub, robot, 6, 30, 35)
+    pid(hub, robot, 9, 30, 35)
 
     #Turn back to 0 b4 pushing thing down then push down
     abs_turning(hub, robot, 0, 50)
-    pid(hub, robot, 3, 30, 0)
+    pid(hub, robot, 3.5, 30, 0)
     flipper.run_for_degrees(90, 50)
     flipper.run_for_degrees(-5, -50)
 
     #Go HOME
-    highspeed_pid(hub, robot, 78, -80, 0)
+    abs_turning(hub, robot, 0, 30)
+    pid(hub, robot, 92, -50, 0)
 
-    flipper.run_for_degrees(-140, 50)
+    flipper.run_for_degrees(-90, 50)
+    abs_turning(hub,robot, 50, 30)
+    pid(hub,robot, 17, 50, 50)
+    abs_turning(hub, robot, 43, 30)
     waitUntilTap(hub)
 
     #Turn to do factory
-    pid(hub, robot, 3, 30, 90)
-    fast_turning(hub, robot, 45, 50)
+    abs_turning(hub, robot, 43, 30)
 
     #Dump + Grab
-    highspeed_pid(hub, robot, 75, 80, 45)
-    flipper.run_for_degrees(140, 50)
-    pid(hub, robot, 20, 80, 45)
+    highspeed_pid(hub, robot, 75, 70, 43)
+    flipper.run_for_degrees(100, 50)
+    pid(hub, robot, 9, 50, 43)
     time.sleep(0.1)
+    waitUntilTap(hub)
 
     #Car
     abs_turning(hub, robot, 64, 30)
-    flipper.run_for_degrees(-140, 50)
+    flipper.run_for_degrees(-90, 50)
     fast_turning(hub, robot, 45, 50)
     pid(hub, robot, 30, -50, 45)
     if flipper.get_position() > 10:
-        flipper.run_for_degrees(140, 50)
+        flipper.run_for_degrees(90, 50)
     fast_turning(hub, robot, 145, 50)
     abs_turning(hub, robot, 137, 50)
 
@@ -165,7 +168,7 @@ def mission():
     #Put units on floor
     fast_turning(hub, robot, 0, 50)
     fast_turning(hub, robot, -45, 45)
-    flipper.run_for_degrees(-140, 30)
+    flipper.run_for_degrees(-90, 30)
 
     #Go home
     fast_turning(hub, robot, -105, 45)
