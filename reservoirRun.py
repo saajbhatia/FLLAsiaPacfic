@@ -19,25 +19,38 @@ def pid(hub, robot, cm, speed, start_angle):
     robot.stop()
 
 def highspeed_pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
     motor = Motor('F')
+    motor1 = Motor('B')
     motor.set_degrees_counted(0)
+    motor1.set_degrees_counted(0)
+    #start_angle = hub.motion_sensor.get_yaw_angle()
+    #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
-    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
-        GSPK = 1.7
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
-        if speed < 0:
-            steer *= -1
-        robot.start(int(steer),speed)
-    while abs(motor.get_degrees_counted())<=degrees_needed:
-        GSPK = 1.7
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+
+    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.15:
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
         if speed < 0:
             steer *= -1
         if speed < 0:
             robot.start(int(steer), -30)
         else:
             robot.start(int(steer), 30)
-    #print("Robot is off by " + str(hub.motion_sensor.get_yaw_angle() - start_angle) + " degrees.")
+        robot.start(int(steer),speed)
+    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.70:
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*6
+        if speed < 0:
+            steer *= -1
+        robot.start(int(steer),speed)
+    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed:
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
+        if speed < 0:
+            steer *= -1
+        if speed < 0:
+            robot.start(int(steer), -30)
+        else:
+            robot.start(int(steer), 30)
+        #wait_for_seconds(0.1)
     robot.stop()
 
 #Used for absolute turning
@@ -86,19 +99,34 @@ print(" ")
 print(" ")
 print(" ")
 
+
+
+def reservoirrun():
+    highspeed_pid(hub, robot, 15, 70, 0)
+    abs_turning(hub, robot, 45, 30)
+    highspeed_pid(hub, robot, 75, 70, 45)
+    abs_turning(hub, robot, 90, 30)
+    highspeed_pid(hub, robot, 25, 70, 90)
+    abs_turning(hub, robot, 135, 20)
+    pid(hub, robot, 20, 40, 135)
+    pid(hub, robot, 20, -40, 135)
+    return
+
+    #calculate difference between actual angle and what it should be
+    #reset gyro angle
+    #turn 90 degrees and add the difference
+    
+    abs_turning(hub, robot, 225, 30)
+    return
+    pid(hub, robot, 10, 30, 225)
+    flipper.run_for_degrees(25, 10)
+    pid(hub, robot, 10, -40, 225)
+
 '''
 DO NOT CHANGE
 '''
 
-highspeed_pid(hub, robot, 15, 80, 0)
-abs_turning(hub, robot, 45, 50)
-highspeed_pid(hub, robot, 75, 80, 45)
-abs_turning(hub, robot, 90, 50)
-highspeed_pid(hub, robot, 25, 80, 90)
-abs_turning(hub, robot, 135, 30)
-pid(hub, robot, 9, 40, 135)
-pid(hub, robot, 4, -40, 135)
-abs_turning(hub, robot, 225, 30)
-pid(hub, robot, 2, 30, 225)
-flipper.run_for_degrees(25, 10)
-pid(hub, robot, 10, -40, 225)
+
+reservoirrun()
+
+print(time.time() - startTime)
