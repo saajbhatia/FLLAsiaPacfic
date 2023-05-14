@@ -1,4 +1,3 @@
-#Importing libraries
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
@@ -19,7 +18,6 @@ def pid(hub, robot, cm, speed, start_angle):
     robot.stop()
 
 def highspeed_pid(hub, robot, cm, speed, start_angle):
-    print('*******************')
     motor = Motor('F')
     motor1 = Motor('B')
     motor.set_degrees_counted(0)
@@ -105,28 +103,40 @@ def reservoirrun():
     highspeed_pid(hub, robot, 15, 70, 0)
     abs_turning(hub, robot, 45, 30)
     highspeed_pid(hub, robot, 75, 70, 45)
+
     abs_turning(hub, robot, 90, 30)
     highspeed_pid(hub, robot, 25, 70, 90)
-    abs_turning(hub, robot, 135, 20)
+    abs_turning(hub, robot, 135, 30)
     pid(hub, robot, 20, 40, 135)
-    pid(hub, robot, 20, -40, 135)
-    return
+    pid(hub, robot, 18.5, -40, 135)
 
-    #calculate difference between actual angle and what it should be
-    #reset gyro angle
-    #turn 90 degrees and add the difference
-    
-    abs_turning(hub, robot, 225, 30)
-    return
-    pid(hub, robot, 10, 30, 225)
-    flipper.run_for_degrees(25, 10)
-    pid(hub, robot, 10, -40, 225)
+    print(hub.motion_sensor.get_yaw_angle())
 
-'''
-DO NOT CHANGE
-'''
+    diff = 135 - hub.motion_sensor.get_yaw_angle()
+    hub.motion_sensor.reset_yaw_angle()
+    abs_turning(hub, robot, 90 + diff, 50)
+
+    print(hub.motion_sensor.get_yaw_angle())
+
+    pid(hub, robot, 10, 30, 90 + diff)
+    flipper.run_for_degrees(35, 10)
+    pid(hub, robot, 10, -40, 90 + diff)
+
+def reservoirRunP2():
+    hub.motion_sensor.reset_yaw_angle()
+    pid(hub, robot, 8, 30, 0)
+    abs_turning(hub, robot, 0, 30)
+    flipper.run_for_degrees(35, 10)
+    flipper.run_for_degrees(50, -10)
+    pid(hub, robot, 15, -40, 0)
+    abs_turning(hub, robot, 40, 30)
+    highspeed_pid(hub, robot, 45, -70, 40)
+    abs_turning(hub, robot, -5, 30)
+    pid(hub, robot, 25, -40, -5)
 
 
-reservoirrun()
 
-print(time.time() - startTime)
+#reservoirrun()
+test()
+
+print("Total time: " + str(time.time() - startTime) + " seconds")
