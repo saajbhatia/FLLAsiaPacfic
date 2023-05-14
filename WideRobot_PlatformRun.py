@@ -27,31 +27,23 @@ def pid(hub, robot, cm, speed, start_angle):
 def highspeed_pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
-    motor1 = Motor('B')
     motor.set_degrees_counted(0)
-    motor1.set_degrees_counted(0)
     #start_angle = hub.motion_sensor.get_yaw_angle()
     #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
-
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.15:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
-        if speed < 0:
-            robot.start(int(steer), -30)
-        else:
-            robot.start(int(steer), 30)
+        #print(steer)
         robot.start(int(steer),speed)
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.70:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*6
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        GSPK = 1.7
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
         if speed < 0:
             steer *= -1
-        robot.start(int(steer),speed)
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
-        if speed < 0:
-            steer *= -1
+        print(steer)
         if speed < 0:
             robot.start(int(steer), -30)
         else:
@@ -91,9 +83,10 @@ def __init__():
     robot.set_motor_rotation(17.5, 'cm')
 
     flipper = Motor('D')
-    flipper.set_stop_action('hold')
+    flipper.set_stop_action('brake')
 
     back_flipper = Motor('A')
+    back_flipper.set_stop_action('brake')
     return hub, robot, flipper, back_flipper
 
 def waitUntilTap(hub):
@@ -108,18 +101,17 @@ do not change
 
 startTime = time.time()
 def plat():
-    back_flipper.run_for_degrees(165, 30)
-    flipper.run_for_degrees(90, 30)
-    pid(hub, robot, 51.5, 40, 0)
-    abs_turning(hub, robot, 0, 20)
+    back_flipper.set_degrees_counted(0)
+    back_flipper.run_for_degrees(160, 10)
+    #flipper.run_for_degrees(90, 30)
+    highspeed_pid(hub, robot, 50.5, 70, 0)
+    #abs_turning(hub, robot, 0, 20)
     #flipping platform run
     for i in range(3):
-        flipper.run_for_rotations(-0.1, 30)
-        flipper.run_for_rotations(0.1, 30)
-    for i in range(2):
-        back_flipper.run_for_degrees(-7, 30)
-        back_flipper.run_for_degrees(7, 30)
-    
+        flipper.run_for_rotations(-0.1, 50)
+        flipper.run_for_rotations(0.1, 50)
+    return
+
     back_flipper.run_for_degrees(-50, 30)
     #Everything after this isn't tested
     abs_turning(hub, robot, 38, 50)
@@ -139,11 +131,13 @@ def plat():
     flipper.run_for_degrees(130, 90)
     abs_turning(hub, robot, 150, 50)
 def test():
-    back_flipper.run_for_degrees(160, 40)
+    for i in range(2):
+        back_flipper.run_for_rotations(0.3, 30)
+        back_flipper.run_for_rotations(-0.3, 30)
 
 def dino_run():
-    pid(hub, robot, 129, 50, 0)
-    abs_turning(hub, robot, 39, 50)
+    highspeed_pid(hub, robot, 129, 70, 0)
+    abs_turning(hub, robot, 40, 50)
     for i in range (2):
         flipper.run_for_degrees(60, 20)
         flipper.run_for_degrees(-45, 20)
@@ -151,7 +145,7 @@ def dino_run():
     pid(hub, robot, 2, 30, 33)
     flipper.run_for_degrees(60, 60)
     abs_turning(hub, robot, 0, 50)
-    pid(hub, robot, 50, 50, 0)
+    highspeed_pid(hub, robot, 50, 70, 0)
     return
     fast_turning(hub, robot, 0, 50)
     highspeed_pid(hub, robot, 45, 80, 0)
@@ -162,6 +156,14 @@ def dino_run():
     flipper.run_for_degrees(-80, 90)
     hub.motion_sensor.reset_yaw_angle()
     plat()
+
+def dino_only_collect_water_run():
+    highspeed_pid(hub, robot, 135.5, 70, 0)
+    abs_turning(hub, robot, 47, 50)
+    flipper.run_for_degrees(85, 60)
+    abs_turning(hub, robot, 0, 50)
+    highspeed_pid(hub, robot, 40, 70, 0)
+
 def plat_variation():
     flipper.run_for_degrees(-30, 30)
     abs_turning(hub, robot, -38, 40)
@@ -175,5 +177,5 @@ def plat_variation():
 
 
 #dino_run()
-dino_run()
+test()
 print(time.time()-startTime)
