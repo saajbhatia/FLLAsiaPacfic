@@ -35,7 +35,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
     degrees_needed = abs(cm) * 360/17.8
 
     while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.15:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*4
         if speed < 0:
             steer *= -1
         if speed < 0:
@@ -49,7 +49,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
             steer *= -1
         robot.start(int(steer),speed)
     while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*2
+        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*4
         if speed < 0:
             steer *= -1
         if speed < 0:
@@ -67,9 +67,18 @@ def calDiff(curr, correct):
     else:
         return correct - curr
 
+def calDiffFlip(num):
+    while True:
+        if num < 0:
+            num += 360
+        elif num > 359:
+            num -= 360
+        else:
+            return num
+
 def abs_turning(hub, robot, deg, speed):
     startTime = time.time()
-    distOfWheels = 38.0
+    distOfWheels = 39.0
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
@@ -80,7 +89,7 @@ def abs_turning(hub, robot, deg, speed):
     print('Total time is', time.time()-startTime)
 
 def fast_turning(hub, robot, deg, speed):
-    distOfWheels = 38.0
+    distOfWheels = 39.0
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
 
 def __init__():
@@ -91,9 +100,10 @@ def __init__():
     robot.set_motor_rotation(17.5, 'cm')
 
     flipper = Motor('D')
-    flipper.set_stop_action('hold')
+    flipper.set_stop_action('brake')
 
     back_flipper = Motor('A')
+    back_flipper.set_stop_action('coast')
     return hub, robot, flipper, back_flipper
 
 def waitUntilTap(hub):
@@ -102,4 +112,3 @@ def waitUntilTap(hub):
             break
 
 hub, robot, flipper, back_flipper = __init__()
-highspeed_pid(hub, robot, 64, 70, 0)
