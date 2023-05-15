@@ -140,7 +140,8 @@ def plat():
     #back flip goes down to collect cylinders
     abs_backflip_turn(back_flipper, -130, 50, back_flipperInit)
     highspeed_pid(hub, robot, 30, 70, 90)
-    return
+
+    '''
     back_flipper.run_for_degrees(60, 50)
     abs_turning(hub, robot, 180, 50)
     back_flipper.run_for_degrees(-10, 50)
@@ -149,6 +150,34 @@ def plat():
     abs_turning(hub, robot, 195, 50)
     flipper.run_for_degrees(130, 90)
     abs_turning(hub, robot, 150, 50)
+    '''
+
+    #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
+    back_flipper.run_for_degrees(50, 50)
+    abs_turning(hub, robot, 180, 40)
+
+    #Do high five
+    #back_flipper.run_for_degrees(-60, 50)
+    pid(hub, robot, 20, -30, 180)
+
+    #Go forward
+    pid(hub, robot, 14, 30, 180)
+
+    #Turn 17 deg
+    abs_turning(hub, robot, 197, 40)
+
+    pid(hub, robot, 3, 30, 197)
+
+    #Catch nrg
+    flipper.run_for_degrees(70, 60)
+
+    abs_turning(hub, robot, 180, 40)
+    pid(hub, robot, 55, 50, 180)
+
+    #Turn 90 degrees clockwise
+    abs_turning(hub, robot, 270, 40)
+    pid(hub, robot, 70, 50, 270)
+
 def test():
     abs_flip_turn(flipper, 80, 50, flipperInit)
 
@@ -191,8 +220,33 @@ def plat_variation():
     flipper.run_for_degrees(80, 30)
     pid(hub, robot, 26, 40, -90)
 
+def highfive_collectnrg():
+    abs_turning(hub, robot, 90, 40)
+
+    #Do high five
+    back_flipper.run_for_degrees(-60, 50)
+    pid(hub, robot, 20, -30, 90)
+
+    #Go forward
+    pid(hub, robot, 14, 30, 90)
+
+    #Turn 10 deg
+    abs_turning(hub, robot, 107, 40)
+
+    pid(hub, robot, 3, 30, 100)
+
+    #Catch nrg
+    flipper.run_for_degrees(70, 60)
+
+    abs_turning(hub, robot, 90, 40)
+    pid(hub, robot, 55, 50, 90)
+
+    #Turn 90 degrees clockwise
+    abs_turning(hub, robot, 180, 40)
+    pid(hub, robot, 100, 50, 180)
 
 
 #dino_run()
 plat()
+#highfive_collectnrg()
 print(time.time()-startTime)
