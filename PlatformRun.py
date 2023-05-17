@@ -130,16 +130,16 @@ def plat():
     pid(hub, robot, 52.5, 50, 0)
     abs_turning(hub, robot, -4, 30)
 
-    #Flip/do platform 
+    #Flip/do platform
     for i in range(4):
         abs_flip_turn(flipper, 50, 50, flipperInit)
         abs_flip_turn(flipper, 80, 50, flipperInit)
-    
+
     # #Flip/do water dam mission
     # for i in range(2):
-    #     abs_backflip_turn(back_flipper, 104, 70, back_flipperInit)
-    #     abs_backflip_turn(back_flipper, 0, 70, back_flipperInit)
-    
+    #    abs_backflip_turn(back_flipper, 104, 70, back_flipperInit)
+    #    abs_backflip_turn(back_flipper, 0, 70, back_flipperInit)
+
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
@@ -147,9 +147,10 @@ def plat():
     abs_turning(hub, robot, 90, 50)
 
     #Put back flip down to collect cylinders
-    abs_backflip_turn(back_flipper, -130, 50, back_flipperInit)
-    
-    highspeed_pid(hub, robot, 28, 70, 90)
+    abs_backflip_turn(back_flipper, -105, 50, back_flipperInit)
+
+    highspeed_pid(hub, robot, 31, 70, 90)
+    abs_turning(hub, robot, 110, 40)
 
     '''
     back_flipper.run_for_degrees(60, 50)
@@ -165,10 +166,11 @@ def plat():
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     back_flipper.run_for_degrees(110, 50)
     abs_turning(hub, robot, 180, 40)
-    back_flipper.run_for_degrees(-40, 50)
+    pid(hub, robot, 5, 30, 180)
+    back_flipper.run_for_degrees(-53, 50)
 
     #Do high five and collect units
-    pid(hub, robot, 24, -30, 180)
+    pid(hub, robot, 29, -30, 180)
 
     #Go forward
     pid(hub, robot, 18, 30, 180)
@@ -183,12 +185,15 @@ def plat():
 
 
     abs_turning(hub, robot, 170, 40)
-    highspeed_pid(hub, robot, 68, 70, 170)
+    highspeed_pid(hub, robot, 55, 70, 170)
 
     #Turn 90 degrees clockwise
-    abs_turning(hub, robot, 270, 40)
-    highspeed_pid(hub, robot, 31, 70, 270)
-
+    abs_turning(hub, robot, 262, 40)
+    back_flipper.run_for_degrees(110, 50)
+    highspeed_pid(hub, robot, 36, 70, 262)
+    back_flipper.run_for_degrees(-50, 50)
+    highspeed_pid(hub, robot, 40, 90, 270)
+    
 def test():
     abs_flip_turn(flipper, 80, 50, flipperInit)
 
