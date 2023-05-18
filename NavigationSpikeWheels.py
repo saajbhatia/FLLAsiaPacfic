@@ -7,57 +7,54 @@ from math import *
 import math
 import time
 
+def highspeed_pid(hub, robot, cm, speed, start_angle):
+    print('*******************')
+    motor = Motor('F')
+    motor.set_degrees_counted(0)
+    degrees_needed = abs(cm) * 360/17.8
+    prevError = 0
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.10:
+        error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        #print(error, error*2+prevError*1, prevError)
+        wait_for_seconds(0.1)
+        steer = error*2+prevError*1
+        if speed < 0:
+            steer *= -1
+        robot.start(steer,30)
+        prevError = error
+    while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
+        error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        #print(error, error*2+prevError*1, prevError)
+        steer = error*2+prevError*1
+        if speed < 0:
+            steer *= -1
+        robot.start(steer,speed)
+        prevError = error
+    while abs(motor.get_degrees_counted())<=degrees_needed:
+        error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        #print(error, error*2+prevError*1, prevError)
+        wait_for_seconds(0.1)
+        steer = error*2+prevError*1
+        if speed < 0:
+            steer *= -1
+        robot.start(steer,40)
+        prevError = error
+    robot.stop()
+
 def pid(hub, robot, cm, speed, start_angle):
     print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
-    #start_angle = hub.motion_sensor.get_yaw_angle()
-    #Degrees needed per centimeter * centimers needed = degrees_needed
     degrees_needed = abs(cm) * 360/17.8
+    prevError = 0
     while abs(motor.get_degrees_counted())<=degrees_needed:
-        GSPK = 2
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*GSPK
+        error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
+        #print(error, error*2+prevError*1, prevError)
+        steer = error*2+prevError*1
         if speed < 0:
             steer *= -1
-        #print(steer)
-        robot.start(int(steer),speed)
-        #wait_for_seconds(0.1)
-    robot.stop()
-
-def highspeed_pid(hub, robot, cm, speed, start_angle):
-    print('*******************')
-    motor = Motor('F')
-    motor1 = Motor('B')
-    motor.set_degrees_counted(0)
-    motor1.set_degrees_counted(0)
-    #start_angle = hub.motion_sensor.get_yaw_angle()
-    #Degrees needed per centimeter * centimers needed = degrees_needed
-    degrees_needed = abs(cm) * 360/17.8
-
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.15:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*4
-        if speed < 0:
-            steer *= -1
-        if speed < 0:
-            robot.start(int(steer), -30)
-        else:
-            robot.start(int(steer), 30)
-        robot.start(int(steer),speed)
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed*0.70:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*6
-        if speed < 0:
-            steer *= -1
-        robot.start(int(steer),speed)
-    while abs(((abs(motor.get_degrees_counted())+abs(motor1.get_degrees_counted())))/2)<=degrees_needed:
-        steer = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)*4
-        if speed < 0:
-            steer *= -1
-        if speed < 0:
-            robot.start(int(steer), -30)
-        else:
-            robot.start(int(steer), 30)
-        #wait_for_seconds(0.1)
-    robot.stop()
+        robot.start(steer,speed)
+        prevError = error
 
 def calDiff(curr, correct):
     if curr - correct > 180:
@@ -112,3 +109,12 @@ def waitUntilTap(hub):
             break
 
 hub, robot, flipper, back_flipper = __init__()
+
+def abs_flip_turn(flipper, correct, speed, flipperInit):
+    flipper.run_to_position(calDiffFlip(flipperInit+correct), 'shortest path', speed)
+
+def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
+    back_flipper.run_to_position(calDiffFlip(back_flipperInit+correct), 'shortest path', speed)
+
+flipperInit = int(flipper.get_position())
+back_flipperInit = int(back_flipper.get_position())
