@@ -1,4 +1,4 @@
-'''
+
 DO NOT CHANGE
 '''
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
@@ -20,7 +20,10 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         steer = error*2+prevError*1
         if speed < 0:
             steer *= -1
-        robot.start(steer,30)
+        if speed > 0:
+            robot.start(steer,30)
+        else:
+            robot.start(steer, -30)
         prevError = error
     while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
         error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
@@ -37,7 +40,10 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         steer = error*2+prevError*1
         if speed < 0:
             steer *= -1
-        robot.start(steer,40)
+        if speed > 0:
+            robot.start(steer,30)
+        else:
+            robot.start(steer, -30)
         prevError = error
     robot.stop()
 
@@ -55,6 +61,8 @@ def pid(hub, robot, cm, speed, start_angle):
             steer *= -1
         robot.start(steer,speed)
         prevError = error
+    
+    robot.stop()
 
 def calDiff(curr, correct):
     if curr - correct > 180:
@@ -118,3 +126,4 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
 
 flipperInit = int(flipper.get_position())
 back_flipperInit = int(back_flipper.get_position())
+
