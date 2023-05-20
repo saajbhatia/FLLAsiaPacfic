@@ -20,7 +20,10 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         steer = error*2+prevError*1
         if speed < 0:
             steer *= -1
-        robot.start(steer,30)
+        if speed > 0:
+            robot.start(steer,30)
+        else:
+            robot.start(steer, -30)
         prevError = error
     while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
         error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
@@ -37,7 +40,10 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         steer = error*2+prevError*1
         if speed < 0:
             steer *= -1
-        robot.start(steer,40)
+        if speed > 0:
+            robot.start(steer,30)
+        else:
+            robot.start(steer, -30)
         prevError = error
     robot.stop()
 
@@ -55,6 +61,8 @@ def pid(hub, robot, cm, speed, start_angle):
             steer *= -1
         robot.start(steer,speed)
         prevError = error
+    
+    robot.stop()
 
 def calDiff(curr, correct):
     if curr - correct > 180:
@@ -140,9 +148,9 @@ def plat():
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    pid(hub, robot, 36, 30, 39)
+    pid(hub, robot, 33, 30, 39)
     abs_turning(hub, robot, 90, 50)
-
+    pid(hub,robot,5,25)
     #Put back flip down to collect cylinders
     abs_backflip_turn(back_flipper, -107, 50, back_flipperInit)
 
@@ -150,6 +158,7 @@ def plat():
     #abs_turning(hub, robot, 110, 40)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
+    abs_turning(hub,robot,110,55)
     back_flipper.run_for_degrees(110, 50)
     abs_turning(hub, robot, 180, 40)
     pid(hub, robot, 1, 10, 180)
@@ -158,11 +167,11 @@ def plat():
     #Do high five and collect units
     highspeed_pid(hub, robot, 25, -30, 180)
     print(hub.motion_sensor.get_yaw_angle())
-    return
-
+    
 
     #Go forward
     highspeed_pid(hub, robot, 18, 30, 180)
+
     #Turn 17 deg
     abs_turning(hub, robot, 197, 40)
 
@@ -173,12 +182,12 @@ def plat():
 
 
     abs_turning(hub, robot, 170, 40)
-    highspeed_pid(hub, robot, 55, 70, 170)
+    highspeed_pid(hub, robot, 50, 70, 170)
 
     #Turn 90 degrees clockwise
     abs_turning(hub, robot, 262, 40)
-    back_flipper.run_for_degrees(110, 50)
-    highspeed_pid(hub, robot, 36, 70, 262)
+    back_flipper.run_for_degrees(100, 50)
+    highspeed_pid(hub, robot, 34, 70, 262)
     back_flipper.run_for_degrees(-50, 50)
     highspeed_pid(hub, robot, 40, 90, 270)
 
@@ -224,31 +233,7 @@ def plat_variation():
     flipper.run_for_degrees(80, 30)
     pid(hub, robot, 26, 40, -90)
 
-def highfive_collectnrg():
-    abs_turning(hub, robot, 90, 40)
-
-    #Do high five
-    back_flipper.run_for_degrees(-60, 50)
-    pid(hub, robot, 20, -30, 90)
-
-    #Go forward
-    pid(hub, robot, 14, 30, 90)
-
-    #Turn 10 deg
-    abs_turning(hub, robot, 107, 40)
-
-    pid(hub, robot, 3, 30, 100)
-
-    #Catch nrg
-    flipper.run_for_degrees(70, 60)
-
-    abs_turning(hub, robot, 90, 40)
-    pid(hub, robot, 55, 50, 90)
-
-    #Turn 90 degrees clockwise
-    abs_turning(hub, robot, 180, 40)
-    pid(hub, robot, 100, 50, 180)
-
+    
 
 #dino_run()
 plat()
