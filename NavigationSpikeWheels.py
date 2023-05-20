@@ -112,10 +112,8 @@ def __init__():
     return hub, robot, flipper, back_flipper
 
 def waitUntilTap(hub):
-    while True:
-        if hub.motion_sensor.wait_for_new_gesture() == 'tapped':
-            break
-
+    hub.right_button.wait_until_pressed()
+    
 hub, robot, flipper, back_flipper = __init__()
 
 def abs_flip_turn(flipper, correct, speed, flipperInit):
