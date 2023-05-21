@@ -21,7 +21,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
             robot.start(steer, -30)
         else:
             robot.start(steer, 30)
-            
+
         prevError = error
     while abs(motor.get_degrees_counted())<=degrees_needed*0.8:
         error = calDiff(hub.motion_sensor.get_yaw_angle(), start_angle)
@@ -122,6 +122,7 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
 flipperInit = int(flipper.get_position())
 back_flipperInit = int(back_flipper.get_position())
 
+
 def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     #Tv mission go forward and come back
@@ -142,7 +143,7 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     #Turn back to 0 b4 pushing thing down then push down
     abs_turning(hub, robot, -90, 30)
-    flipper.run_for_degrees(90, 30)
+    flipper.run_for_degrees(90, 60)
     flipper.run_for_degrees(-5, -30)
 
     #Go HOME
@@ -156,15 +157,16 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     #Dump + Grab
     highspeed_pid(hub, robot, 65, 80, -48)
-    abs_flip_turn(flipper, 90, 50, flipperInit)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
     highspeed_pid(hub, robot, 20, 80, -48)
-    time.sleep(0.1)
 
     #Car
     abs_turning(hub, robot, -16, 30)
-    abs_flip_turn(hub, robot, -90, 70)
-    time.sleep(0.5)
-    flipper.run_for_degrees(90, 30)
+    abs_flip_turn(flipper, -90, 70, flipperInit)
+    
+
+    #OG deg 90
+    abs_flip_turn(flipper, 0, 70, flipperInit)
     abs_turning(hub, robot, -48, 30)
     highspeed_pid(hub, robot, 32, -80, -48)
     abs_turning(hub, robot, 47, 30)
@@ -173,9 +175,59 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
     #Windmill
     #flipper.run_for_degrees(140, 30)
     highspeed_pid(hub, robot, 18, 80, 47)
-    fast_turning(hub, robot, 47, 45)
+    abs_turning(hub, robot, 47, 45)
     for i in range(3):
         pid(hub, robot, 10.5, 50, 47)
+        wait_for_seconds(0.5)
+        pid(hub, robot, 9.75, -50, 47)
+
+    pid(hub, robot, 5, -30, 47)
+
+    #Put units on floor
+    fast_turning(hub, robot, -90, 30)
+    fast_turning(hub, robot, -135, 45)
+    flipper.run_for_degrees(-90, 30)
+
+    #Go home
+    fast_turning(hub, robot, -205, 45)
+    highspeed_pid(hub, robot, 65, 80, -205)
+
+    #Align for dino
+    abs_turning(hub, robot, -90, 45)
+    car_windmill()
+
+def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
+    waitUntilTap(hub)
+    flipper.run_for_degrees(-85, 30)
+
+    abs_turning(hub, robot, -48, 30)
+
+    #Dump + Grab
+    highspeed_pid(hub, robot, 65, 80, -48)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
+    highspeed_pid(hub, robot, 20, 80, -48)
+
+    #Car
+    abs_turning(hub, robot, -16, 30)
+    abs_flip_turn(flipper, -90, 30, flipperInit)
+
+
+    #Car mission
+    abs_flip_turn(flipper, 0, 30, flipperInit)
+    abs_turning(hub, robot, -48, 50)
+
+    #Back from car
+    highspeed_pid(hub, robot, 33, -80, -48)
+    abs_turning(hub, robot, 47, 10)
+
+
+    #Windmill
+    #flipper.run_for_degrees(140, 30)
+
+    highspeed_pid(hub, robot, 18, 80, 47)
+    abs_turning(hub, robot, 47, 45)
+    for i in range(3):
+        pid(hub, robot, 10.5, 30, 47)
         wait_for_seconds(0.5)
         pid(hub, robot, 9.75, -50, 47)
 
@@ -197,5 +249,6 @@ def test():
     flipper.run_for_degrees(-90, 30)
 
 currentTime = time.time()
-mission(hub, robot, flipper, back_flipper, flipperInit)
+car_windmill(hub, robot, flipper, back_flipper, flipperInit)
+#mission(hub, robot, flipper, back_flipper, flipperInit)
 print(time.time()-currentTime)
