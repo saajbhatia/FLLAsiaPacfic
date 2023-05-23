@@ -1,4 +1,4 @@
-
+'''
 DO NOT CHANGE
 '''
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
@@ -61,16 +61,16 @@ def pid(hub, robot, cm, speed, start_angle):
             steer *= -1
         robot.start(steer,speed)
         prevError = error
-    
+
     robot.stop()
 
 def calDiff(curr, correct):
     if curr - correct > 180:
-        return correct - (curr - 360)
+        return correct - (curr - 360) + initAngle
     elif curr - correct < -180:
-        return correct - (curr + 360)
+        return correct - (curr + 360) + initAngle
     else:
-        return correct - curr
+        return correct - curr + initAngle
 
 def calDiffFlip(num):
     while True:
@@ -113,7 +113,7 @@ def __init__():
 
 def waitUntilTap(hub):
     hub.right_button.wait_until_pressed()
-    
+
 hub, robot, flipper, back_flipper = __init__()
 
 def abs_flip_turn(flipper, correct, speed, flipperInit):
@@ -125,3 +125,8 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
 flipperInit = int(flipper.get_position())
 back_flipperInit = int(back_flipper.get_position())
 
+'''
+DO NOT CHANGE
+'''
+
+initAngle = -90
