@@ -136,7 +136,7 @@ def plat():
     abs_turning(hub, robot, -4, 30)
 
     #Flip/do platform
-    for i in range(4):
+    for i in range(3):
         abs_flip_turn(flipper, 50, 30, flipperInit)
         abs_flip_turn(flipper, 80, 20, flipperInit)
 
@@ -150,33 +150,36 @@ def plat():
     abs_flip_turn(flipper, 0, 50, flipperInit)
     pid(hub, robot, 33, 40, 39)
     abs_turning(hub, robot, 90, 50)
-    pid(hub, robot, 0.5, 25, 90)
+    pid(hub, robot, 3, 25, 90)
     #Put back flip down to collect cylinders
     abs_backflip_turn(back_flipper, -108, 30, back_flipperInit)
 
-    highspeed_pid(hub, robot, 27, 80, 90)
+    highspeed_pid(hub, robot, 26, 80, 90)
     #abs_turning(hub, robot, 110, 40)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     #abs_turning(hub,robot,110,55)
+    #abs_turning(hub, robot, 160, 10)
     back_flipper.run_for_degrees(110, 50)
     abs_turning(hub, robot, 180, 40)
-    #pid(hub, robot, 1, 10, 180)
+    pid(hub, robot, 3, 10, 180)
     back_flipper.run_for_degrees(-45, 50)
+    
 
     #Do high five and collect units
-    highspeed_pid(hub, robot, 24, -30, 180)
+    highspeed_pid(hub, robot, 30, -30, 180)
     print(hub.motion_sensor.get_yaw_angle())
 
 
     #Go forward
-    highspeed_pid(hub, robot, 18, 30, 180)
+    highspeed_pid(hub, robot, 24, 30, 180)
+    return
 
     #Turn 17 deg
     abs_turning(hub, robot, 197, 40)
 
-    pid(hub, robot, 5, 30, 197)
-    pid(hub, robot, 3, -30, 197)
+    pid(hub, robot, 3, 10, 197)
+    #pid(hub, robot, 3, -30, 197)
 
     #Catch nrg
     flipper.run_for_degrees(70, 60)
@@ -188,7 +191,7 @@ def plat():
     #Turn 90 degrees clockwise
     abs_turning(hub, robot, 262, 40)
     back_flipper.run_for_degrees(105, 50)
-    highspeed_pid(hub, robot, 32, 70, 262)
+    highspeed_pid(hub, robot, 35, 70, 262)
     back_flipper.run_for_degrees(-60, 50)
     highspeed_pid(hub, robot, 40, 90, 270)
 
