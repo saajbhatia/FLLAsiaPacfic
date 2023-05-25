@@ -21,7 +21,7 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
         if speed < 0:
             steer *= -1
         if speed > 0:
-            robot.start(steer,30)
+            robot.start(steer, 30)
         else:
             robot.start(steer, -30)
         prevError = error
@@ -112,9 +112,7 @@ def __init__():
     return hub, robot, flipper, back_flipper
 
 def waitUntilTap(hub):
-    while True:
-        if hub.motion_sensor.wait_for_new_gesture() == 'tapped':
-            break
+    hub.right_button.wait_until_pressed()
 
 hub, robot, flipper, back_flipper = __init__()
 
@@ -132,8 +130,8 @@ startTime = time.time()
 def plat():
     #Go to platform
     abs_flip_turn(flipper, 80, 30, flipperInit)
-    pid(hub, robot, 52.5, 50, 0)
-    abs_turning(hub, robot, -4, 30)
+    pid(hub, robot, 51.5, 50, 0)
+    abs_turning(hub, robot, -6, 30)
 
     #Flip/do platform
     for i in range(3):
@@ -148,52 +146,56 @@ def plat():
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    pid(hub, robot, 33, 40, 39)
+    pid(hub, robot, 34, 40, 39)
     abs_turning(hub, robot, 90, 50)
-    pid(hub, robot, 3, 25, 90)
+    #pid(hub, robot, 0.5, 25, 90)
     #Put back flip down to collect cylinders
-    abs_backflip_turn(back_flipper, -108, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -115, 30, back_flipperInit)
 
-    highspeed_pid(hub, robot, 26, 80, 90)
+    highspeed_pid(hub, robot, 28, 80, 90)
     #abs_turning(hub, robot, 110, 40)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     #abs_turning(hub,robot,110,55)
-    #abs_turning(hub, robot, 160, 10)
-    back_flipper.run_for_degrees(110, 50)
+    back_flipper.run_for_degrees(100, 50)
+    pid(hub, robot, 3, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    pid(hub, robot, 3, 10, 180)
-    back_flipper.run_for_degrees(-45, 50)
-    
+    #pid(hub, robot, 1, 10, 180)
+    back_flipper.run_for_degrees(-20, 50)
 
     #Do high five and collect units
-    highspeed_pid(hub, robot, 30, -30, 180)
+    highspeed_pid(hub, robot, 24, -30, 180)
+    
     print(hub.motion_sensor.get_yaw_angle())
 
 
     #Go forward
-    highspeed_pid(hub, robot, 24, 30, 180)
+    highspeed_pid(hub, robot, 18, 30, 180)
     return
+
+    '''
+    WORKS UNTIL HERE
+    '''
 
     #Turn 17 deg
     abs_turning(hub, robot, 197, 40)
 
-    pid(hub, robot, 3, 10, 197)
-    #pid(hub, robot, 3, -30, 197)
+    pid(hub, robot, 5, 30, 197)
+    pid(hub, robot, 4, -30, 197)
 
     #Catch nrg
     flipper.run_for_degrees(70, 60)
 
 
     abs_turning(hub, robot, 170, 40)
-    highspeed_pid(hub, robot, 55, 70, 170)
+    highspeed_pid(hub, robot, 53, 70, 170)
 
     #Turn 90 degrees clockwise
-    abs_turning(hub, robot, 262, 40)
+    abs_turning(hub, robot, 255, 40)
     back_flipper.run_for_degrees(105, 50)
-    highspeed_pid(hub, robot, 35, 70, 262)
+    highspeed_pid(hub, robot, 32, 70, 255)
     back_flipper.run_for_degrees(-60, 50)
-    highspeed_pid(hub, robot, 40, 90, 270)
+    highspeed_pid(hub, robot, 40, 90, 255)
 
 def test():
     highspeed_pid(hub, robot, 12.5, -50, 0)
