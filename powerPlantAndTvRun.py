@@ -65,6 +65,7 @@ def pid(hub, robot, cm, speed, start_angle):
     robot.stop()
 
 def calDiff(curr, correct):
+    initAngle = 90
     if curr - correct > 180:
         return correct - (curr - 360) + initAngle
     elif curr - correct < -180:
@@ -155,12 +156,10 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     #Go HOME
     highspeed_pid(hub, robot, 80, -80, -90)
-
-    waitUntilTap(hub)
-    car_windmill()
+    car_windmill(hub, robot, flipper, back_flipper, flipperInit)
 
 def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
-
+    
     waitUntilTap(hub)
     flipper.run_for_degrees(-85, 30)
 
@@ -172,7 +171,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     highspeed_pid(hub, robot, 18, 80, -48)
 
     #Car
-    abs_turning(hub, robot, -12, 30)
+    abs_turning(hub, robot, -17, 30)
     abs_flip_turn(flipper, -90, 30, flipperInit)
 
 
@@ -210,6 +209,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     #Put units on floor
     fast_turning(hub, robot, -90, 30)
     fast_turning(hub, robot, -135, 45)
+    wait_for_seconds(1)
     flipper.run_for_degrees(-90, 30)
 
     #Go home
@@ -220,8 +220,6 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     back_flipper.run_for_degrees(-90, 30)
     highspeed_pid(hub, robot, 65, 80, -205)
 
-    #Align for dino
-    abs_turning(hub, robot, -90, 45)
 
 def test():
     flipper.run_for_degrees(-90, 30)
