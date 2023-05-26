@@ -146,7 +146,7 @@ def plat():
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    pid(hub, robot, 34, 40, 39)
+    highspeed_pid(hub, robot, 34, 80, 39)
     abs_turning(hub, robot, 90, 50)
     #pid(hub, robot, 0.5, 25, 90)
     #Put back flip down to collect cylinders
@@ -160,17 +160,32 @@ def plat():
     back_flipper.run_for_degrees(100, 50)
     pid(hub, robot, 3, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    #pid(hub, robot, 1, 10, 180)
-    back_flipper.run_for_degrees(-20, 50)
+    pid(hub, robot, 2, 10, 180)
+    back_flipper.set_stop_action('hold')
+    back_flipper.run_for_degrees(-45, 40)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
-    
+    back_flipper.set_stop_action('coast')
+
     print(hub.motion_sensor.get_yaw_angle())
 
 
     #Go forward
-    highspeed_pid(hub, robot, 18, 30, 180)
+    highspeed_pid(hub, robot, 21, 30, 180)
+    abs_turning(hub, robot, 185, 40)
+
+    #Catch nrg
+    flipper.run_for_degrees(70, 60)
+    abs_turning(hub, robot, 170, 40)
+    highspeed_pid(hub, robot, 51, 70, 170)
+
+    #Turn 90 degrees clockwise
+    abs_turning(hub, robot, 255, 40)
+    back_flipper.run_for_degrees(120, 50)
+    highspeed_pid(hub, robot, 29.5, 70, 255)
+    back_flipper.run_for_degrees(-10, 50)
+    highspeed_pid(hub, robot, 40, 90, 255)
     return
 
     '''
