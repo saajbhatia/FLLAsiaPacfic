@@ -130,8 +130,12 @@ startTime = time.time()
 def plat():
     #Go to platform
     abs_flip_turn(flipper, 80, 30, flipperInit)
-    pid(hub, robot, 51.5, 50, 0)
+    back_flipper.set_stop_action('coast')
+    abs_backflip_turn(back_flipper, 55, 30, back_flipperInit)
+    highspeed_pid(hub, robot, 52.5, 70, 0)
+    abs_backflip_turn(back_flipper, 20, 30, back_flipperInit)
     abs_turning(hub, robot, -6, 30)
+
 
     #Flip/do platform
     for i in range(3):
@@ -145,8 +149,9 @@ def plat():
 
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    highspeed_pid(hub, robot, 34, 80, 39)
+    highspeed_pid(hub, robot, 31, 80, 39)
     abs_turning(hub, robot, 90, 50)
     #pid(hub, robot, 0.5, 25, 90)
     #Put back flip down to collect cylinders
@@ -157,12 +162,12 @@ def plat():
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     #abs_turning(hub,robot,110,55)
-    back_flipper.run_for_degrees(100, 50)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 3, -40, 90)
     abs_turning(hub, robot, 180, 40)
     pid(hub, robot, 2, 10, 180)
     back_flipper.set_stop_action('hold')
-    back_flipper.run_for_degrees(-45, 40)
+    abs_backflip_turn(back_flipper, -75, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
@@ -182,10 +187,11 @@ def plat():
 
     #Turn 90 degrees clockwise
     abs_turning(hub, robot, 255, 40)
-    back_flipper.run_for_degrees(120, 50)
-    highspeed_pid(hub, robot, 29.5, 70, 255)
-    back_flipper.run_for_degrees(-10, 50)
-    highspeed_pid(hub, robot, 40, 90, 255)
+    #back_flipper.run_for_degrees(120, 50)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    highspeed_pid(hub, robot, 69.5, 80, 255)
+    #back_flipper.run_for_degrees(-10, 50)
+    #highspeed_pid(hub, robot, 40, 90, 255)
     return
 
     '''
