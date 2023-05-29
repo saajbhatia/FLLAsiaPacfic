@@ -8,7 +8,6 @@ import math
 import time
 
 def highspeed_pid(hub, robot, cm, speed, start_angle):
-    print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
     degrees_needed = abs(cm) * 360/17.8
@@ -48,7 +47,6 @@ def highspeed_pid(hub, robot, cm, speed, start_angle):
     robot.stop()
 
 def pid(hub, robot, cm, speed, start_angle):
-    print('*******************')
     motor = Motor('F')
     motor.set_degrees_counted(0)
     degrees_needed = abs(cm) * 360/17.8
@@ -91,8 +89,6 @@ def abs_turning(hub, robot, deg, speed):
             break
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
 
-    print('Total time is', time.time()-startTime)
-
 def fast_turning(hub, robot, deg, speed):
     distOfWheels = 39.0
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
@@ -132,15 +128,17 @@ def plat():
     abs_flip_turn(flipper, 80, 30, flipperInit)
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 55, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 52.5, 70, 0)
-    abs_backflip_turn(back_flipper, 20, 30, back_flipperInit)
-    abs_turning(hub, robot, -6, 30)
+    highspeed_pid(hub, robot, 51.5, 70, 0)
+    abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
+    pid(hub, robot, 0.5, 30, 0)
+    abs_turning(hub, robot, -7, 30)
 
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
     #Flip/do platform
     for i in range(3):
-        abs_flip_turn(flipper, 50, 30, flipperInit)
-        abs_flip_turn(flipper, 80, 20, flipperInit)
+        abs_flip_turn(flipper, 50, 50, flipperInit)
+        abs_flip_turn(flipper, 80, 50, flipperInit)
 
     # #Flip/do water dam mission
     # for i in range(2):
@@ -149,7 +147,7 @@ def plat():
 
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+
     abs_flip_turn(flipper, 0, 50, flipperInit)
     highspeed_pid(hub, robot, 31, 80, 39)
     abs_turning(hub, robot, 90, 50)
@@ -157,17 +155,17 @@ def plat():
     #Put back flip down to collect cylinders
     abs_backflip_turn(back_flipper, -115, 30, back_flipperInit)
 
-    highspeed_pid(hub, robot, 28, 80, 90)
+    highspeed_pid(hub, robot, 32, 80, 90)
     #abs_turning(hub, robot, 110, 40)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     #abs_turning(hub,robot,110,55)
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
-    pid(hub, robot, 3, -40, 90)
+    pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    pid(hub, robot, 2, 10, 180)
+    pid(hub, robot, 2, 30, 180)
     back_flipper.set_stop_action('hold')
-    abs_backflip_turn(back_flipper, -75, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -70, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
@@ -177,21 +175,25 @@ def plat():
 
 
     #Go forward
-    highspeed_pid(hub, robot, 21, 30, 180)
-    abs_turning(hub, robot, 185, 40)
+    highspeed_pid(hub, robot, 22, 30, 180)
+    abs_turning(hub, robot, 195, 40)
 
     #Catch nrg
+    #waitUntilTap(hub)
     flipper.run_for_degrees(70, 60)
-    abs_turning(hub, robot, 170, 40)
-    highspeed_pid(hub, robot, 51, 70, 170)
+    abs_turning(hub, robot, 165, 40)
+    highspeed_pid(hub, robot, 51, 80, 165)
 
     #Turn 90 degrees clockwise
-    abs_turning(hub, robot, 255, 40)
+    abs_turning(hub, robot, 265, 40)
     #back_flipper.run_for_degrees(120, 50)
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 69.5, 80, 255)
+    abs_backflip_turn(back_flipper, -10, 30, back_flipperInit)
+    pid(hub, robot, 85, 90, 265)
     #back_flipper.run_for_degrees(-10, 50)
     #highspeed_pid(hub, robot, 40, 90, 255)
+    
+    abs_flip_turn(flipper, 0, 55, flipperInit)
+
     return
 
     '''
@@ -260,11 +262,65 @@ def plat_variation():
     flipper.run_for_degrees(80, 30)
     pid(hub, robot, 26, 40, -90)
 
+def dump():
+    hub.motion_sensor.reset_yaw_angle()
+    abs_turning(hub, robot, 3, 30)
+    highspeed_pid(hub, robot, 73, 80, 3)
+    abs_turning(hub, robot, 0, 30)
+    flipper.run_for_rotations(0.1, 30)
+    flipper.run_for_rotations(0.1, -50)
+    pid(hub, robot, 2, -40, 0)
+    abs_flip_turn(flipper, 70, 50, flipperInit)
+    #abs_turning(hub, robot, 10, 30)
+    pid(hub, robot, 71, -90, 10)
+    #abs_turning(hub, robot, 0, 30)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
 
+'''
+def reservoir():
+    highspeed_pid(hub, robot, 15, 70, 0)
+    abs_turning(hub, robot, 45, 30)
+    highspeed_pid(hub, robot, 75, 70, 45)
+
+    abs_turning(hub, robot, 90, 30)
+    highspeed_pid(hub, robot, 20, 70, 90)
+    abs_turning(hub, robot, 140, 30)
+
+    pid(hub, robot, 25, 40, 140)
+    #used to be 16
+    pid(hub, robot, 13.5, -30, 140)
+
+    print(hub.motion_sensor.get_yaw_angle())
+
+    diff = 140 - hub.motion_sensor.get_yaw_angle()
+    hub.motion_sensor.reset_yaw_angle()
+    abs_turning(hub, robot, 93 + diff, 30)
+
+    print(hub.motion_sensor.get_yaw_angle())
+
+    pid(hub, robot, 9.5, 40, 93 + diff)
+    #abs_turning(hub, robot, 93 + diff, 50)
+
+    print(hub.motion_sensor.get_yaw_angle())
+
+    flipper.run_for_degrees(60, 10)
+
+    pid(hub, robot, 5, -40, 93 + diff)
+    flipper.run_for_degrees(60, -10)
+    pid(hub, robot, 10, -40, 93 + diff)
+
+    return
+
+'''
 
 #dino_run()
 plat()
+waitUntilTap(hub)
+dump()
+#waitUntilTap(hub)
+#reservoir()
+
 #highfive_collectnrg()
 
 
-print(time.time()-startTime)
+print("Time: " + str(time.time()-startTime))
