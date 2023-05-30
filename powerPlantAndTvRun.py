@@ -126,6 +126,7 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
     back_flipper.run_to_position(calDiffFlip(back_flipperInit+correct), 'shortest path', speed)
 
 flipperInit = int(flipper.get_position())
+print(flipperInit)
 back_flipperInit = int(back_flipper.get_position())
 
 '''
@@ -150,8 +151,9 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     #Go more B4 pushing down
     pid(hub, robot, 8, 10, 0)
-
+    print(flipperInit, 'flipperInit, 1')
     abs_flip_turn(flipper, 0, 30, flipperInit)
+    print(flipperInit, 'flipperInit, 2')
 
     #Go HOME
     highspeed_pid(hub, robot, 76, -80, 0)
@@ -166,7 +168,7 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
     print("Time for TV n Powerplant: " + str(time.time()-currentTime))
 
-    
+
 
     car_windmill(hub, robot, flipper, back_flipper, flipperInit)
 
@@ -181,24 +183,26 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
 
     #flipper.run_for_degrees(-85, 30)
 
-    abs_turning(hub, robot, -46, 30)
+    fast_turning(hub, robot, -46, 30)
 
     #Dump + Grab
     highspeed_pid(hub, robot, 65, 80, -46)
-    abs_flip_turn(flipper, 0, 50, flipperInit)
-    highspeed_pid(hub, robot, 21, 80, -46)
+    print(flipperInit, 'flipperInit, 1')
+    abs_flip_turn(flipper, 90, 30, flipperInit)
+    print(flipperInit, 'flipperInit, 2')
+    highspeed_pid(hub, robot, 18, 80, -46)
 
     #Do Car
     abs_turning(hub, robot, -21, 30)
-    abs_flip_turn(flipper, -90, 30, flipperInit)
+    abs_flip_turn(flipper, 0, 30, flipperInit)
     abs_turning(hub, robot, -50, 30)
 
     #Back from car
     back_flipper.run_for_degrees(100, 30)
-    highspeed_pid(hub, robot, 42, -50, -48)
-    abs_flip_turn(flipper, 0, 30, flipperInit)
+    highspeed_pid(hub, robot, 38, -50, -48)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
     time.sleep(0.1)
-    highspeed_pid(hub, robot, 10, 50, -48)
+    highspeed_pid(hub, robot, 8, 50, -48)
 
     #Turn for windmill
     back_flipper.run_for_degrees(110, -30)
@@ -207,15 +211,14 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
 
 
     #Do Windmill
-    highspeed_pid(hub, robot, 18, 80, 47)
-    abs_turning(hub, robot, 45, 50)
+    highspeed_pid(hub, robot, 17, 80, 47)
     for i in range(3):
-        pid(hub, robot, 9.5, 30, 45)
+        pid(hub, robot, 9.5, 50, 45)
         wait_for_seconds(0.5)
-        pid(hub, robot, 8.75, -50, 45)
+        pid(hub, robot, 8.75, -70, 45)
 
 
-    pid(hub, robot, 5, -30, 47)
+    pid(hub, robot, 7, -30, 47)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
@@ -231,10 +234,10 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
 
 
 def test():
-    abs_turning(hub, robot, 90, 30)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
 
 currentTime = time.time()
 #mission(hub, robot, flipper, back_flipper, flipperInit)
-car_windmill(hub, robot, flipper, back_flipper, -90)
+car_windmill(hub, robot, flipper, back_flipper, flipperInit)
 #test()
 print(time.time()-currentTime)
