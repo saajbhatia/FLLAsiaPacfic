@@ -86,7 +86,7 @@ def abs_turning(hub, robot, deg, speed):
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
-        if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
+        if abs(calDiff(hub.motion_sensor.get_yaw_angle(), deg)) <= 3:
             break
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
 
@@ -174,8 +174,11 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
 
 def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
+    print('befortap')
     currentTime = time.time()
-    #waitUntilTap(hub)
+    print('firattap')
+    waitUntilTap(hub)
+    print('scondstap')
     hub.motion_sensor.reset_yaw_angle()
 
 
@@ -183,7 +186,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
 
     #flipper.run_for_degrees(-85, 30)
 
-    fast_turning(hub, robot, -46, 30)
+    abs_turning(hub, robot, -46, 30)
 
     #Dump + Grab
     highspeed_pid(hub, robot, 65, 80, -46)
@@ -210,15 +213,15 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     abs_turning(hub, robot, 47, 10)
 
 
-    #Do Windmill
+    #Do Windmill 9.5 8.75
     highspeed_pid(hub, robot, 17, 80, 47)
     for i in range(3):
-        pid(hub, robot, 9.5, 50, 45)
+        pid(hub, robot, 8.5, 80, 45)
         wait_for_seconds(0.5)
-        pid(hub, robot, 8.75, -70, 45)
+        pid(hub, robot, 7.5, -70, 45)
 
 
-    pid(hub, robot, 7, -30, 47)
+    pid(hub, robot, 10, -30, 47)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
