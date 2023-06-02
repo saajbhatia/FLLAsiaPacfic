@@ -210,7 +210,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     pid(hub, robot, 6, 30, 45)
     pid(hub, robot, 6, -50, 45)
     pid(hub, robot, 6, 30, 45)
-    pid(hub, robot, 12, -50, 45)
+    pid(hub, robot, 13, -50, 45)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
