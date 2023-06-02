@@ -174,54 +174,43 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
 
 
 def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
-    print('befortap')
     currentTime = time.time()
-    print('firattap')
-    waitUntilTap(hub)
-    print('scondstap')
+    #waitUntilTap(hub)
     hub.motion_sensor.reset_yaw_angle()
-
-
     print("Time for Transistion: " + str(time.time()-currentTime))
 
-    #flipper.run_for_degrees(-85, 30)
 
     abs_turning(hub, robot, -46, 30)
 
     #Dump + Grab
     highspeed_pid(hub, robot, 65, 80, -46)
-    print(flipperInit, 'flipperInit, 1')
     abs_flip_turn(flipper, 90, 30, flipperInit)
-    print(flipperInit, 'flipperInit, 2')
     highspeed_pid(hub, robot, 18, 80, -46)
 
     #Do Car
     abs_turning(hub, robot, -21, 30)
     abs_flip_turn(flipper, 0, 30, flipperInit)
+    time.sleep(0.1)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
     abs_turning(hub, robot, -50, 30)
 
     #Back from car
-    back_flipper.run_for_degrees(100, 30)
-    highspeed_pid(hub, robot, 38, -50, -48)
+    highspeed_pid(hub, robot, 31, -50, -48)
     abs_flip_turn(flipper, 90, 30, flipperInit)
-    time.sleep(0.1)
-    highspeed_pid(hub, robot, 8, 50, -48)
 
     #Turn for windmill
-    back_flipper.run_for_degrees(110, -30)
-    fast_turning(hub, robot, 20, 30)
-    abs_turning(hub, robot, 47, 10)
+    fast_turning(hub, robot, 60, 30)
+    wait_for_seconds(0.1)
+    abs_turning(hub, robot, 45, 30)
 
-
-    #Do Windmill 9.5 8.75
-    highspeed_pid(hub, robot, 17, 80, 47)
-    for i in range(3):
-        pid(hub, robot, 8.5, 80, 45)
-        wait_for_seconds(0.5)
-        pid(hub, robot, 7.5, -70, 45)
-
-
-    pid(hub, robot, 10, -30, 47)
+    #Do Windmill 
+    highspeed_pid(hub, robot, 29, 80, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 6, -50, 45)
+    pid(hub, robot, 6, 30, 45)
+    pid(hub, robot, 6, -50, 45)
+    pid(hub, robot, 6, 30, 45)
+    pid(hub, robot, 12, -50, 45)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
