@@ -203,13 +203,15 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     wait_for_seconds(0.1)
     abs_turning(hub, robot, 45, 30)
 
-    #Do Windmill 
+    #Do Windmill
     highspeed_pid(hub, robot, 29, 80, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -50, 45)
     pid(hub, robot, 6, 30, 45)
+    wait_for_seconds(0.1)
     pid(hub, robot, 6, -50, 45)
     pid(hub, robot, 6, 30, 45)
+    wait_for_seconds(0.1)
     pid(hub, robot, 13, -50, 45)
 
     #Put units on floor
