@@ -125,7 +125,7 @@ startTime = time.time()
 
 def plat():
     #Go to platform
-    flipper.run_to_degrees_counted(270-flipper.get_position(), 50)
+    abs_flip_turn(flipper, 90, 50, flipperInit)
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 52, 30, back_flipperInit)
     highspeed_pid(hub, robot, 50.5, 70, 0)
@@ -150,7 +150,6 @@ def plat():
 
     abs_flip_turn(flipper, 0, 50, flipperInit)
     highspeed_pid(hub, robot, 31, 80, 39)
-    return
     abs_turning(hub, robot, 90, 50)
     #pid(hub, robot, 0.5, 25, 90)
     #Put back flip down to collect cylinders
@@ -192,7 +191,7 @@ def plat():
     pid(hub, robot, 85, 90, 260)
     #back_flipper.run_for_degrees(-10, 50)
     #highspeed_pid(hub, robot, 40, 90, 255)
-    
+
     abs_flip_turn(flipper, 0, 55, flipperInit)
 
     return
