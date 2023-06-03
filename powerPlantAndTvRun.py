@@ -125,9 +125,7 @@ def abs_flip_turn(flipper, correct, speed, flipperInit):
 def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
     back_flipper.run_to_position(calDiffFlip(back_flipperInit+correct), 'shortest path', speed)
 
-flipperInit = int(flipper.get_position())
-print(flipperInit)
-back_flipperInit = int(back_flipper.get_position())
+
 
 '''
 DO NOT CHANGE
@@ -231,7 +229,7 @@ def test():
     abs_flip_turn(flipper, 90, 30, flipperInit)
 
 currentTime = time.time()
-#mission(hub, robot, flipper, back_flipper, flipperInit)
-car_windmill(hub, robot, flipper, back_flipper, flipperInit)
+mission(hub, robot, flipper, back_flipper, int(flipper.get_position()))
+car_windmill(hub, robot, flipper, back_flipper, int(flipper.get_position()))
 #test()
 print(time.time()-currentTime)
