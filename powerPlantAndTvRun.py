@@ -132,21 +132,22 @@ DO NOT CHANGE
 '''
 
 # initAngle = 0
-def mission(hub, robot, flipper, back_flipper, flipperInit):
+def powerplant_and_tv(hub, robot, flipper, back_flipper, flipperInit):
     #Go to pwr plant
-    abs_flip_turn(flipper, 60, 30, flipperInit)
-    highspeed_pid(hub, robot, 49, 80, 0)
+    abs_flip_turn(flipper, 63, 50, flipperInit)
+    highspeed_pid(hub, robot, 50, 80, 0)
+    abs_turning(hub, robot, -6, 50)
     abs_flip_turn(flipper, 0, 100, flipperInit)
 
     #Turn right 35, and go diagonal
-    abs_turning(hub, robot, 60, 30)
-    pid(hub, robot, 6.5, 50, 60)
+    abs_turning(hub, robot, 30, 50)
+    pid(hub, robot, 3, 50, 30)
 
     #Turn back to 0 b4 pushing thing down then push down
-    abs_turning(hub, robot, 0, 30)
+    abs_turning(hub, robot, 0, 50)
 
     #Go more B4 pushing down
-    pid(hub, robot, 7.5, 50, 0)
+    pid(hub, robot, 5, 50, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
 
     #Go HOME
@@ -159,17 +160,10 @@ def mission(hub, robot, flipper, back_flipper, flipperInit):
     pid(hub, robot, 33, 50, 90)
     pid(hub, robot, 40, -100, 90)
     abs_flip_turn(flipper, 0, 100, flipperInit)
-   
-    print("Time for TV n Powerplant: " + str(time.time()-currentTime))
-    car_windmill(hub, robot, flipper, back_flipper, flipperInit)
+    return
 
-
-def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
-    currentTime = time.time()
-    #waitUntilTap(hub)
+def car_windmill(hub, robot, flipper, flipperInit):
     hub.motion_sensor.reset_yaw_angle()
-    print("Time for Transistion: " + str(time.time()-currentTime))
-
 
     abs_turning(hub, robot, -46, 30)
 
@@ -197,7 +191,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     #Do Windmill
     highspeed_pid(hub, robot, 29, 80, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 6, -50, 45)
+    pid(hub, robot, 6.5, -50, 45)
     pid(hub, robot, 6, 30, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -50, 45)
@@ -222,7 +216,7 @@ def test():
     abs_flip_turn(flipper, 90, 30, flipperInit)
 
 currentTime = time.time()
-mission(hub, robot, flipper, back_flipper, int(flipper.get_position()))
+powerplant_and_tv(hub, robot, flipper, back_flipper, int(flipper.get_position()))
 car_windmill(hub, robot, flipper, back_flipper, int(flipper.get_position()))
 #test()
 print(time.time()-currentTime)
