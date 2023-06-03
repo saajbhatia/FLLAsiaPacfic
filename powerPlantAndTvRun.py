@@ -208,7 +208,7 @@ def car_windmill(hub, robot, flipper, back_flipper, flipperInit):
     pid(hub, robot, 6, 30, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -50, 45)
-    pid(hub, robot, 6, 30, 45)
+    pid(hub, robot, 8, 30, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 13, -50, 45)
 
