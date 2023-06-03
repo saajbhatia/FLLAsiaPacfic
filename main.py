@@ -120,19 +120,20 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
 
 def powerplant_and_tv(hub, robot, flipper, back_flipper, flipperInit):
     #Go to pwr plant
-    abs_flip_turn(flipper, 60, 30, flipperInit)
-    highspeed_pid(hub, robot, 49, 80, 0)
+    abs_flip_turn(flipper, 63, 50, flipperInit)
+    highspeed_pid(hub, robot, 50, 80, 0)
+    abs_turning(hub, robot, -6, 50)
     abs_flip_turn(flipper, 0, 100, flipperInit)
 
     #Turn right 35, and go diagonal
-    abs_turning(hub, robot, 60, 30)
-    pid(hub, robot, 6.5, 50, 60)
+    abs_turning(hub, robot, 30, 50)
+    pid(hub, robot, 3, 50, 30)
 
     #Turn back to 0 b4 pushing thing down then push down
-    abs_turning(hub, robot, 0, 30)
+    abs_turning(hub, robot, 0, 50)
 
     #Go more B4 pushing down
-    pid(hub, robot, 7.5, 50, 0)
+    pid(hub, robot, 5, 50, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
 
     #Go HOME
@@ -176,7 +177,7 @@ def car_windmill(hub, robot, flipper, flipperInit):
     #Do Windmill
     highspeed_pid(hub, robot, 29, 80, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 6, -50, 45)
+    pid(hub, robot, 6.5, -50, 45)
     pid(hub, robot, 6, 30, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -50, 45)
@@ -193,6 +194,7 @@ def car_windmill(hub, robot, flipper, flipperInit):
     #Go home
     fast_turning(hub, robot, -215, 45)
     highspeed_pid(hub, robot, 65, 100, -205)
+
 
 def dino_only_collect_water_run():
     highspeed_pid(hub, robot, 130, 100, 0)
