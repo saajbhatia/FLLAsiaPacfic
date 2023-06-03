@@ -60,11 +60,11 @@ def pid(hub, robot, cm, speed, start_angle):
 
 def calDiff(curr, correct):
     if curr - correct > 180:
-        return correct - (curr - 360) 
+        return correct - (curr - 360)
     elif curr - correct < -180:
-        return correct - (curr + 360) 
+        return correct - (curr + 360)
     else:
-        return correct - curr 
+        return correct - curr
 
 def calDiffFlip(num):
     while True:
@@ -208,8 +208,8 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     abs_backflip_turn(back_flipper, 52, 30, back_flipperInit)
     highspeed_pid(hub, robot, 50.5, 70, 0)
     abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
-    pid(hub, robot, 0.75, 30, 0)
-    abs_turning(hub, robot, -6.25, 30)
+    #pid(hub, robot, 0.25, 30, 0)
+    abs_turning(hub, robot, -6, 30)
 
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
@@ -234,7 +234,7 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    pid(hub, robot, 2, 30, 180)
+    #pid(hub, robot, 2, 30, 180)
     back_flipper.set_stop_action('hold')
     abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
 
@@ -245,6 +245,7 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     #Go forward
     highspeed_pid(hub, robot, 20, 30, 180)
     abs_turning(hub, robot, 195, 40)
+    pid(hub, robot, 2, 30, 195)
 
     #Catch nrg
     flipper.run_for_degrees(70, 60)
@@ -253,7 +254,7 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
 
     #Turn 90 degrees clockwise
     abs_turning(hub, robot, 260, 40)
-    abs_backflip_turn(back_flipper, -10, 30, back_flipperInit)
+    #abs_backflip_turn(back_flipper, -10, 30, back_flipperInit)
     pid(hub, robot, 85, 90, 260)
 
     abs_flip_turn(flipper, 0, 55, flipperInit)
@@ -265,7 +266,7 @@ def dump(hub, robot, flipper, flipperInit):
     abs_turning(hub, robot, 0, 30)
     flipper.run_for_rotations(0.15, 50)
     flipper.run_for_rotations(0.15, -50)
-    pid(hub, robot, 4, -40, 0)
+    pid(hub, robot, 1, -40, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
     pid(hub, robot, 71, -90, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
@@ -280,15 +281,16 @@ def reservoir(hub, robot, flipper):
     abs_turning(hub, robot, 140, 30)
 
     pid(hub, robot, 25, 40, 140)
-    pid(hub, robot, 13.5, -30, 140)
+    pid(hub, robot, 15.5, -30, 140)
 
     diff = 140 - hub.motion_sensor.get_yaw_angle()
     hub.motion_sensor.reset_yaw_angle()
     abs_turning(hub, robot, 93 + diff, 30)
 
-    pid(hub, robot, 9.5, 40, 93 + diff)
+    pid(hub, robot, 9, 40, 93 + diff)
 
-    flipper.run_for_degrees(60, 10)
+    flipper.run_for_degrees(65, 10)
+    return
 
     pid(hub, robot, 5, -40, 93 + diff)
     flipper.run_for_degrees(60, -10)
@@ -311,19 +313,17 @@ car_windmill(hub, robot, flipper, int(flipper.get_position()))
 waitUntilTap(hub)
 dino_only_collect_water_run(hub, robot, flipper)
 
+
 #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
 waitUntilTap(hub)
-plat(hub, robot, flipper, int(flipper.get_position()), int(back_flipper.get_position())) 
+hub.motion_sensor.reset_yaw_angle()
+plat(hub, robot, flipper, back_flipper, int(flipper.get_position()), int(back_flipper.get_position()))
+print(time.time()-currentTime)
 waitUntilTap(hub)
 dump(hub, robot, flipper, int(flipper.get_position()))
 
 #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
 waitUntilTap(hub)
-reservoir(hub, robot, int(flipper.get_position()))
+reservoir(hub, robot, flipper)
 
 print(time.time()-currentTime)
-
-
-
-
-
