@@ -75,13 +75,13 @@ def calDiffFlip(num):
         else:
             return num
 
-def abs_turning(hub, robot, deg, speed):
+def abs_turning(hub, robot, deg, speed, offset = 3):
     startTime = time.time()
     distOfWheels = 39.0
     calDiff(hub.motion_sensor.get_yaw_angle(), deg)
     robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, speed)
     for i in range(5):
-        if calDiff(hub.motion_sensor.get_yaw_angle(), deg) == 0:
+        if calDiff(hub.motion_sensor.get_yaw_angle(), deg) <= offset:
             break
         robot.move(distOfWheels*calDiff(hub.motion_sensor.get_yaw_angle(), deg)/360, 'cm', 100, 20)
 
@@ -122,7 +122,7 @@ def powerplant_and_tv(hub, robot, flipper, back_flipper, flipperInit):
     #Go to pwr plant
     abs_flip_turn(flipper, 63, 50, flipperInit)
     highspeed_pid(hub, robot, 50, 80, 0)
-    abs_turning(hub, robot, -6, 50)
+    abs_turning(hub, robot, -6, 50, 0)
     abs_flip_turn(flipper, 0, 100, flipperInit)
 
     #Turn right 35, and go diagonal
@@ -194,14 +194,17 @@ def car_windmill(hub, robot, flipper, flipperInit):
     #Go home
     fast_turning(hub, robot, -215, 45)
     highspeed_pid(hub, robot, 65, 100, -205)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
 
-
-def dino_only_collect_water_run():
+def dino_only_collect_water_run(hub, robot, flipper, back_flipper, back_flipperInit):
+    hub.motion_sensor.reset_yaw_angle()
     highspeed_pid(hub, robot, 130, 100, 0)
     fast_turning(hub, robot, 37, 50)
     flipper.run_for_degrees(85, 60)
     fast_turning(hub, robot, 0, 50)
     highspeed_pid(hub, robot, 40, 100, 0)
+    back_flipper.set_stop_action('coast')
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
 def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     #Go to platform
@@ -211,7 +214,7 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     highspeed_pid(hub, robot, 50.5, 70, 0)
     abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
     #pid(hub, robot, 0.25, 30, 0)
-    abs_turning(hub, robot, -6, 30)
+    abs_turning(hub, robot, -6, 30, 0)
 
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
@@ -243,6 +246,8 @@ def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
     back_flipper.set_stop_action('coast')
+    abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
+
 
     #Go forward
     highspeed_pid(hub, robot, 20, 30, 180)
@@ -273,7 +278,7 @@ def dump(hub, robot, flipper, flipperInit):
     pid(hub, robot, 71, -90, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
 
-def reservoir(hub, robot, flipper):
+def reservoir(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 15, 70, 0)
     abs_turning(hub, robot, 45, 30)
     highspeed_pid(hub, robot, 75, 70, 45)
@@ -287,14 +292,16 @@ def reservoir(hub, robot, flipper):
 
     diff = 140 - hub.motion_sensor.get_yaw_angle()
     hub.motion_sensor.reset_yaw_angle()
-    abs_turning(hub, robot, 93 + diff, 30)
+    abs_turning(hub, robot, 93 + diff, 30, 0)
 
     pid(hub, robot, 9, 40, 93 + diff)
 
     flipper.run_for_degrees(65, 10)
-    return
+    
 
-    pid(hub, robot, 5, -40, 93 + diff)
+    pid(hub, robot, 10, -50, 93 + diff)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
+    return
     flipper.run_for_degrees(60, -10)
     pid(hub, robot, 10, -40, 93 + diff)
 
@@ -305,27 +312,37 @@ def reservoir(hub, robot, flipper):
 currentTime = time.time()
 hub, robot, flipper, back_flipper = __init__()
 
+waitUntilTap(hub)
+print("New Run:")
 
 #Run 1 - TV Run - Missions Done: Powerplant, TV, Car, Windmill, Toy Factory
 powerplant_and_tv(hub, robot, flipper, back_flipper, int(flipper.get_position()))
+transistion = time.time()
 waitUntilTap(hub)
+print("Transition Time for Car: " + str(time.time()-transistion))
 car_windmill(hub, robot, flipper, int(flipper.get_position()))
 
 #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
+transistion = time.time()
 waitUntilTap(hub)
-dino_only_collect_water_run(hub, robot, flipper)
+print("Transition Time for Dino: " + str(time.time()-transistion))
+dino_only_collect_water_run(hub, robot, flipper, back_flipper, int(back_flipper.get_position()))
 
 
 #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
+transistion = time.time()
 waitUntilTap(hub)
 hub.motion_sensor.reset_yaw_angle()
+print("Transition Time for Platform: " + str(time.time()-transistion))
 plat(hub, robot, flipper, back_flipper, int(flipper.get_position()), int(back_flipper.get_position()))
-print(time.time()-currentTime)
+transistion = time.time()
 waitUntilTap(hub)
+print("Transition Time for Dump: " + str(time.time()-transistion))
 dump(hub, robot, flipper, int(flipper.get_position()))
 
 #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
+transistion = time.time()
 waitUntilTap(hub)
-reservoir(hub, robot, flipper)
-
+print("Transition Time for Reservoir: " + str(time.time()-transistion))
+reservoir(hub, robot, flipper, int(flipper.get_position()))
 print(time.time()-currentTime)
