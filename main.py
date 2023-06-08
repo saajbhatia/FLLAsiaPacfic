@@ -269,14 +269,26 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def dump(hub, robot, flipper, flipperInit):
     hub.motion_sensor.reset_yaw_angle()
     abs_turning(hub, robot, 3, 30)
-    highspeed_pid(hub, robot, 72, 80, 3)
-    abs_turning(hub, robot, 0, 30)
+    highspeed_pid(hub, robot, 74, 80, 3)
     flipper.run_for_rotations(0.15, 50)
     flipper.run_for_rotations(0.15, -50)
-    pid(hub, robot, 1, -40, 0)
+    pid(hub, robot, 3, -40, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
-    pid(hub, robot, 71, -90, 10)
+    pid(hub, robot, 69, -80, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
+
+def dumpAndTruck(hub, robot, flipper, flipperInit):
+    dump(hub, robot, flipper, flipperInit)
+    abs_turning(hub, robot, -45, 30, 0)
+    pid(hub, robot, 29.5, 50, -45)
+    abs_turning(hub, robot, 0, 30, 0)
+    abs_flip_turn(flipper, 90, 50, flipperInit)
+    #abs_turning(hub, robot, 0, 30)
+    pid(hub, robot, 13, 50, 0)
+    wait_for_seconds(0.5)
+    #abs_turning(hub, robot, 3, 30, 0)
+    pid(hub, robot, 5, -10, 0)
+    highspeed_pid(hub, robot, 31, -85, 0)
 
 def reservoir(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 15, 70, 0)
@@ -407,7 +419,8 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()))
+    
     print(time.time()-currentTime)
 
 Run()
