@@ -206,7 +206,7 @@ def dino_only_collect_water_run(hub, robot, flipper, back_flipper, back_flipperI
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
-def plat(hub, robot, flipper, back_flipper, flipperInit, back_flipperInit):
+def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to platform
     abs_flip_turn(flipper, 90, 50, flipperInit)
     back_flipper.set_stop_action('coast')
@@ -306,7 +306,7 @@ def reservoir(hub, robot, flipper, flipperInit):
     flipper.run_for_degrees(60, -10)
     pid(hub, robot, 10, -40, 93 + diff)
 
-#THIS CODE DOES THE ORIGINAL RES STUFF BUT ALSO THE CAR 
+#THIS CODE DOES THE ORIGINAL RES STUFF BUT ALSO THE CAR
 #Latest 6/6
 def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #highspeed_pid(hub, robot, 15, 70, 0)
@@ -329,7 +329,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     #Hydro units
     abs_turning(hub, robot, 93 + diff, 30, 0)
 
-    pid(hub, robot, 1, 40, 93 + diff)
+    pid(hub, robot, 1.35, 40, 93 + diff)
 
     flipper.run_for_degrees(65, 10)
 
@@ -340,28 +340,26 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     abs_turning(hub, robot, 135, 30)
 
     #abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
-    abs_backflip_turn(back_flipper, 70, 60, back_flipperInit)
+    back_flipper.run_for_degrees(75, 60)
 
-    #Go to car and flip 
-    pid(hub, robot, 14, -40, 135 + diff)
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    #Go to car and flip
+    pid(hub, robot, 15, -40, 135 + diff)
+    back_flipper.run_for_degrees(-30, 60)
 
-    #flipper back down  
-    abs_backflip_turn(back_flipper, 60, 30, back_flipperInit)
+    #flipper back down
+    back_flipper.run_for_degrees(30, 60)
     pid(hub, robot, 3, 40, 135 + diff)
 
     #Up and go to truck
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    back_flipper.run_for_degrees(-70, 60)
     pid(hub, robot, 30, -40, 135 + diff)
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
-    #Turn and truck 
+    #Turn and truck
     abs_turning(hub, robot, 85, 30)
-    pid(hub, robot, 20, -40, 85 + diff)
-    return
-    
+    pid(hub, robot, 23, -60, 85 + diff)
 
-
+def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
+    back_flipper.run_for_degrees(-70, 60)
 #please do not have any code outside of functions
 def mainmenu():
 
@@ -405,12 +403,11 @@ def mainmenu():
     print(time.time()-currentTime)
 
 
-#Change this to run the thing you want to run. 
+#Change this to run the thing you want to run.
 def Run():
-     currentTime = time.time()
-     hub, robot, flipper, back_flipper = __init__()
-     reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-     print(time.time()-currentTime)
+    currentTime = time.time()
+    hub, robot, flipper, back_flipper = __init__()
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    print(time.time()-currentTime)
 
 Run()
-
