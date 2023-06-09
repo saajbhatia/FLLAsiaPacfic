@@ -118,7 +118,7 @@ def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
     back_flipper.run_to_position(calDiffFlip(back_flipperInit+correct), 'shortest path', speed)
 
 
-def powerplant_and_tv(hub, robot, flipper, back_flipper, flipperInit):
+def powerplant_and_tv(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to pwr plant
     abs_flip_turn(flipper, 63, 50, flipperInit)
     highspeed_pid(hub, robot, 50, 80, 0)
@@ -196,7 +196,44 @@ def car_windmill(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 65, 100, -205)
     abs_flip_turn(flipper, 0, 50, flipperInit)
 
-def dino_only_collect_water_run(hub, robot, flipper, back_flipper, back_flipperInit):
+def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
+    hub.motion_sensor.reset_yaw_angle()
+
+    abs_turning(hub, robot, -46, 30)
+
+    #Dump + Grab
+    highspeed_pid(hub, robot, 60, 80, -46)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
+    pid(hub, robot, 7, -50, -46)
+
+    #Turn for windmill
+    fast_turning(hub, robot, 60, 30)
+    wait_for_seconds(0.1)
+    abs_turning(hub, robot, 45, 30)
+
+    #Do Windmill
+    highspeed_pid(hub, robot, 29, 80, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 6.5, -50, 45)
+    pid(hub, robot, 6, 30, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 6, -50, 45)
+    pid(hub, robot, 8, 30, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 13, -50, 45)
+
+    #Put units on floor
+    left_abs_turning(hub, robot, -145, 50)
+    abs_turning(hub, robot, -145, 50)
+    wait_for_seconds(1)
+    flipper.run_for_degrees(-90, 30)
+
+    #Go home
+    fast_turning(hub, robot, -215, 45)
+    highspeed_pid(hub, robot, 57, 100, -205)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
+
+def dino_only_collect_water_run(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     hub.motion_sensor.reset_yaw_angle()
     highspeed_pid(hub, robot, 130, 100, 0)
     fast_turning(hub, robot, 37, 50)
@@ -277,7 +314,7 @@ def dump(hub, robot, flipper, flipperInit):
     pid(hub, robot, 69, -80, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
 
-def dumpAndTruck(hub, robot, flipper, flipperInit):
+def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     dump(hub, robot, flipper, flipperInit)
     abs_turning(hub, robot, -45, 30, 0)
     pid(hub, robot, 29.5, 50, -45)
@@ -419,8 +456,7 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()))
-    
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
 Run()
