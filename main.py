@@ -212,14 +212,13 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 45, 30)
 
     #Do Windmill
-    highspeed_pid(hub, robot, 29, 80, 45)
+    highspeed_pid(hub, robot, 32, 80, 45)
+    pid(hub, robot, 5.5, -50, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 6.5, -50, 45)
-    pid(hub, robot, 6, 30, 45)
-    wait_for_seconds(0.1)
+    pid(hub, robot, 5.5, 30, 45)
     pid(hub, robot, 6, -50, 45)
-    pid(hub, robot, 8, 30, 45)
-    wait_for_seconds(0.1)
+    wait_for_seconds(0.3)
+    pid(hub, robot, 6.5, 30, 45)
     pid(hub, robot, 13, -50, 45)
 
     #Put units on floor
@@ -358,6 +357,7 @@ def reservoir(hub, robot, flipper, flipperInit):
 #THIS CODE DOES THE ORIGINAL RES STUFF BUT ALSO THE CAR
 #Latest 6/6
 def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
+    hub.motion_sensor.reset_yaw_angle()
     #highspeed_pid(hub, robot, 15, 70, 0)
 
     #Turn and go parallel to hydro dam
@@ -424,31 +424,30 @@ def mainmenu():
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Car: " + str(time.time()-transistion))
-    windmill(hub, robot, flipper, int(flipper.get_position()))
+    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dino: " + str(time.time()-transistion))
-    dino_only_collect_water_run(hub, robot, flipper, back_flipper, int(back_flipper.get_position()))
-
+    dino_only_collect_water_run(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
     transistion = time.time()
     waitUntilTap(hub)
     hub.motion_sensor.reset_yaw_angle()
     print("Transition Time for Platform: " + str(time.time()-transistion))
-    plat(hub, robot, flipper, back_flipper, int(flipper.get_position()), int(back_flipper.get_position()))
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dump: " + str(time.time()-transistion))
-    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()))
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Reservoir: " + str(time.time()-transistion))
-    reservoir2(hub, robot, flipper, int(flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
 
@@ -456,7 +455,7 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    (hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
-mainmenu()
+Run()
