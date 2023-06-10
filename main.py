@@ -420,11 +420,11 @@ def mainmenu():
     print("New Run:")
 
     #Run 1 - TV Run - Missions Done: Powerplant, TV, Car, Windmill, Toy Factory
-    powerplant_and_tv(hub, robot, flipper, back_flipper, int(flipper.get_position()))
+    powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Car: " + str(time.time()-transistion))
-    car_windmill(hub, robot, flipper, int(flipper.get_position()))
+    windmill(hub, robot, flipper, int(flipper.get_position()))
 
     #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
     transistion = time.time()
@@ -442,13 +442,13 @@ def mainmenu():
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dump: " + str(time.time()-transistion))
-    dump(hub, robot, flipper, int(flipper.get_position()))
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()))
 
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Reservoir: " + str(time.time()-transistion))
-    reservoir(hub, robot, flipper, int(flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()))
     print(time.time()-currentTime)
 
 
@@ -456,7 +456,7 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    (hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
-Run()
+mainmenu()
