@@ -245,14 +245,14 @@ def dino_only_collect_water_run(hub, robot, flipper, flipperInit, back_flipper, 
 def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to platform
     abs_flip_turn(flipper, 90, 50, flipperInit)
+    back_flipper.set_stop_action('hold')
+    abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
+    highspeed_pid(hub, robot, 54.5, 70, 0)
     back_flipper.set_stop_action('coast')
-    abs_backflip_turn(back_flipper, 52, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 50.5, 70, 0)
     abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
     #pid(hub, robot, 0.25, 30, 0)
     abs_turning(hub, robot, -6, 30, 0)
-
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
     #Flip/do platform
     for i in range(3):
@@ -261,9 +261,11 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 
     #Go to solar farm energy units
     abs_turning(hub, robot, 39, 50)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+
 
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    highspeed_pid(hub, robot, 31, 80, 39)
+    highspeed_pid(hub, robot, 28, 80, 39)
     abs_turning(hub, robot, 90, 50)
 
     #Put back flip down to collect cylinders
@@ -277,7 +279,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 180, 40)
     #pid(hub, robot, 2, 30, 180)
     back_flipper.set_stop_action('hold')
-    abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -73, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
@@ -455,7 +457,7 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
-Run()
+mainmenu()
