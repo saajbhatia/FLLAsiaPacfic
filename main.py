@@ -372,8 +372,8 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     highspeed_pid(hub, robot, 20, 70, 0)
     abs_turning(hub, robot, 50, 30)
 
-    pid(hub, robot, 23, 40, 50)
-    pid(hub, robot, 16, -30, 50)
+    pid(hub, robot, 18, 40, 50)
+    pid(hub, robot, 11, -30, 50)
 
     diff = 50 - hub.motion_sensor.get_yaw_angle()
     hub.motion_sensor.reset_yaw_angle()
@@ -381,12 +381,13 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     #Hydro units
     abs_turning(hub, robot, 93 + diff, 30, 0)
 
-    pid(hub, robot, 1.35, 40, 93 + diff)
+    #used to be 1.35
+    pid(hub, robot, 2, 40, 93 + diff)
 
     flipper.run_for_degrees(65, 10)
 
 
-    pid(hub, robot, 10.5, -50, 93 + diff)
+    pid(hub, robot, 11, -50, 93 + diff)
     abs_flip_turn(flipper, 0, 50, flipperInit)
     pid(hub, robot, 7, -40, 93 + diff)
     abs_turning(hub, robot, 135, 30)
@@ -395,7 +396,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     back_flipper.run_for_degrees(75, 60)
 
     #Go to car and flip
-    pid(hub, robot, 15, -40, 135 + diff)
+    pid(hub, robot, 16.5, -40, 135 + diff)
     back_flipper.run_for_degrees(-30, 60)
 
     #flipper back down
