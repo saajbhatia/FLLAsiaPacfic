@@ -246,7 +246,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to platform
     abs_flip_turn(flipper, 90, 50, flipperInit)
     back_flipper.set_stop_action('hold')
-    abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 73, 30, back_flipperInit)
     highspeed_pid(hub, robot, 54.5, 70, 0)
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
@@ -277,7 +277,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    #pid(hub, robot, 2, 30, 180)
+    #pid(hub, robot, 1, 30, 180)
     back_flipper.set_stop_action('hold')
     abs_backflip_turn(back_flipper, -73, 30, back_flipperInit)
 
@@ -290,7 +290,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go forward
     highspeed_pid(hub, robot, 20, 30, 180)
     abs_turning(hub, robot, 195, 40)
-    pid(hub, robot, 2, 30, 195)
+    pid(hub, robot, 1, 30, 195)
 
     #Catch nrg
     flipper.run_for_degrees(70, 60)
@@ -303,6 +303,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     pid(hub, robot, 85, 90, 260)
 
     abs_flip_turn(flipper, 0, 55, flipperInit)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
 def dump(hub, robot, flipper, flipperInit):
     hub.motion_sensor.reset_yaw_angle()
@@ -457,7 +458,8 @@ def mainmenu():
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
 mainmenu()
