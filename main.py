@@ -319,16 +319,19 @@ def dump(hub, robot, flipper, flipperInit):
 def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     dump(hub, robot, flipper, flipperInit)
     abs_turning(hub, robot, -45, 30, 0)
-    pid(hub, robot, 29.5, 50, -45)
+    #used to be 29.5
+    pid(hub, robot, 28, 50, -45)
     abs_turning(hub, robot, 0, 30, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
     #abs_turning(hub, robot, 0, 30)
-    pid(hub, robot, 13, 50, 0)
+    pid(hub, robot, 8, 40, 0)
+    abs_flip_turn(flipper, 95, 50, flipperInit)
+    pid(hub, robot, 5, 20, 0)
     wait_for_seconds(0.5)
     #abs_turning(hub, robot, 3, 30, 0)
     pid(hub, robot, 5, -10, 0)
-    highspeed_pid(hub, robot, 31, -85, 0)
-    abs_flip_turn(flipper, 0, 50, flipperInit)
+    highspeed_pid(hub, robot, 35, -85, 0)
+    #abs_flip_turn(flipper, 0, 50, flipperInit)
 
 def reservoir(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 15, 70, 0)
@@ -469,4 +472,3 @@ def Run():
     print(time.time()-currentTime)
 
 mainmenu()
-quit()
