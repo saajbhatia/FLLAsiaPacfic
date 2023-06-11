@@ -241,12 +241,13 @@ def dino_only_collect_water_run(hub, robot, flipper, flipperInit, back_flipper, 
     highspeed_pid(hub, robot, 40, 100, 0)
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    abs_flip_turn(flipper, 0, 30, flipperInit)
 
 def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to platform
     abs_flip_turn(flipper, 90, 50, flipperInit)
     back_flipper.set_stop_action('hold')
-    abs_backflip_turn(back_flipper, 73, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
     highspeed_pid(hub, robot, 54.5, 70, 0)
     back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
@@ -269,7 +270,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 90, 50)
 
     #Put back flip down to collect cylinders
-    abs_backflip_turn(back_flipper, -115, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -115, 50, back_flipperInit)
 
     highspeed_pid(hub, robot, 32, 80, 90)
 
@@ -306,8 +307,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
 def dump(hub, robot, flipper, flipperInit):
-    hub.motion_sensor.reset_yaw_angle()
-    abs_turning(hub, robot, 3, 30)
+    #abs_turning(hub, robot, 3, 30)
     highspeed_pid(hub, robot, 74, 80, 3)
     flipper.run_for_rotations(0.15, 50)
     flipper.run_for_rotations(0.15, -50)
@@ -328,6 +328,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     #abs_turning(hub, robot, 3, 30, 0)
     pid(hub, robot, 5, -10, 0)
     highspeed_pid(hub, robot, 31, -85, 0)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
 
 def reservoir(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 15, 70, 0)
@@ -389,7 +390,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     pid(hub, robot, 11, -50, 93 + diff)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    pid(hub, robot, 7, -40, 93 + diff)
+    pid(hub, robot, 8, -40, 93 + diff)
     abs_turning(hub, robot, 135, 30)
 
     #abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
@@ -445,6 +446,9 @@ def mainmenu():
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dump: " + str(time.time()-transistion))
+    #Reset everything for dump
+    hub, robot, flipper, back_flipper = __init__()
+
     dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
@@ -460,7 +464,9 @@ def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
     #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
 mainmenu()
+quit()
