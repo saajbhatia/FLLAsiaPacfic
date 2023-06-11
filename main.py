@@ -196,15 +196,26 @@ def car_windmill(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 65, 100, -205)
     abs_flip_turn(flipper, 0, 50, flipperInit)
 
-def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
+def car_windmill(hub, robot, flipper, flipperInit):
     hub.motion_sensor.reset_yaw_angle()
 
     abs_turning(hub, robot, -46, 30)
 
     #Dump + Grab
-    highspeed_pid(hub, robot, 60, 80, -46)
+    highspeed_pid(hub, robot, 65, 80, -46)
     abs_flip_turn(flipper, 90, 30, flipperInit)
-    pid(hub, robot, 7, -50, -46)
+    highspeed_pid(hub, robot, 18, 80, -46)
+
+    #Do Car
+    abs_turning(hub, robot, -21, 30)
+    abs_flip_turn(flipper, 0, 30, flipperInit)
+    time.sleep(0.1)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
+    abs_turning(hub, robot, -50, 30)
+
+    #Back from car
+    highspeed_pid(hub, robot, 31, -50, -48)
+    abs_flip_turn(flipper, 90, 30, flipperInit)
 
     #Turn for windmill
     fast_turning(hub, robot, 60, 30)
@@ -212,13 +223,16 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 45, 30)
 
     #Do Windmill
-    highspeed_pid(hub, robot, 32, 80, 45)
-    pid(hub, robot, 5.5, -50, 45)
+    highspeed_pid(hub, robot, 29, 80, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 5.5, 30, 45)
-    pid(hub, robot, 6, -50, 45)
-    wait_for_seconds(0.3)
-    pid(hub, robot, 6.5, 30, 45)
+    pid(hub, robot, 6.5, -80, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 6, 80, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 6, -80, 45)
+    wait_for_seconds(0.1)
+    pid(hub, robot, 8, 80, 45)
+    wait_for_seconds(0.1)
     pid(hub, robot, 13, -50, 45)
 
     #Put units on floor
@@ -229,9 +243,9 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 
     #Go home
     fast_turning(hub, robot, -215, 45)
-    highspeed_pid(hub, robot, 57, 100, -205)
+    highspeed_pid(hub, robot, 65, 100, -205)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-
+    
 def dino_only_collect_water_run(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     hub.motion_sensor.reset_yaw_angle()
     highspeed_pid(hub, robot, 130, 100, 0)
