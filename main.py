@@ -428,6 +428,64 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     #Turn and truck
     abs_turning(hub, robot, 85, 30)
     pid(hub, robot, 23, -60, 85 + diff)
+    
+ def reservoir3(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
+    hub.motion_sensor.reset_yaw_angle()
+    #highspeed_pid(hub, robot, 15, 70, 0)
+
+    #Turn and go parallel to hydro dam
+    abs_turning(hub, robot, -45, 30)
+    highspeed_pid(hub, robot, 75, 70, -45)
+
+    #Turn to 0 and put innovation thing
+    abs_turning(hub, robot, 0, 30)
+    highspeed_pid(hub, robot, 20, 70, 0)
+    abs_turning(hub, robot, 50, 30)
+
+    pid(hub, robot, 18, 40, 50)
+    pid(hub, robot, 11, -30, 50)
+
+    diff = 50 - hub.motion_sensor.get_yaw_angle()
+    hub.motion_sensor.reset_yaw_angle()
+
+    #Hydro units
+    abs_turning(hub, robot, 93 + diff, 30, 0)
+
+    #used to be 1.35
+    pid(hub, robot, 2, 40, 93 + diff)
+
+    flipper.run_for_degrees(65, 10)
+
+
+    pid(hub, robot, 11, -50, 93 + diff)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
+    pid(hub, robot, 8, -40, 93 + diff)
+    abs_turning(hub, robot, 135, 30)
+
+    #abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
+    back_flipper.run_for_degrees(75, 60)
+
+    #Go to car and flip
+    pid(hub, robot, 18.5, -40, 135 + diff)
+    abs_turning(hub, robot, 110, 30)
+    pid(hub, robot, 6, -30, 110)
+    back_flipper.run_for_degrees(-30, 20)
+
+    #flipper back down
+    back_flipper.set_stop_action('hold')
+    back_flipper.run_for_degrees(30, 60)
+    #pid(hub, robot, 3, 40, 135 + diff)
+
+    #Up and go to truck
+    back_flipper.run_for_degrees(-50, 60)
+    pid(hub, robot, 13, -80, 130 + diff)
+    abs_turning(hub, robot, 89, 50)
+    pid(hub, robot, 23, -80, 89)
+    return()
+
+    #Turn and truck
+    abs_turning(hub, robot, 85, 30)
+    pid(hub, robot, 23, -60, 85 + diff)
 
 def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     back_flipper.run_for_degrees(-70, 60)
