@@ -385,27 +385,31 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     abs_turning(hub, robot, 93 + diff, 50, 0)
 
     #used to be 1.35
-    pid(hub, robot, 2, 30, 93 + diff)
+    pid(hub, robot, 5, 30, 93 + diff)
 
-    flipper.run_for_degrees(65, 10)
+    flipper.run_for_degrees(100, 10)
 
-    highspeed_pid(hub, robot, 11, -50, 93 + diff)
+    highspeed_pid(hub, robot, 13, -50, 93 + diff)
     abs_flip_turn(flipper, 0, 80, flipperInit)
     pid(hub, robot, 9, -30, 93 + diff)
     abs_turning(hub, robot, 135, 50)
 
-    back_flipper.run_for_degrees(80, 60)
+    #back_flipper.run_for_degrees(80, 60)
+    abs_backflip_turn(back_flipper, 90, 30, back_flipperInit)
 
-    #Go to car and flip
-    highspeed_pid(hub, robot, 13.5, -50, 135 + diff)
-    back_flipper.run_for_degrees(-75, 10)
+    #Go to car and flip first pid used to be 13.5cm
+    highspeed_pid(hub, robot, 10, -50, 135 + diff)
+    #waitUntilTap(hub)🤖🤖🤖🤖
+    back_flipper.run_for_degrees(-75, 30)
+    pid(hub, robot, 3, 30, 135)
+    back_flipper.run_for_degrees(-10, 10)
 
     #Go to truck
-    highspeed_pid(hub, robot, 29, -80, 135 + diff)
+    highspeed_pid(hub, robot, 32, -80, 135 + diff)
 
     #Turn and truck
-    abs_turning(hub, robot, 85, 50)
-    highspeed_pid(hub, robot, 21, -80, 85 + diff)
+    abs_turning(hub, robot, 72, 50)
+    highspeed_pid(hub, robot, 21, -80, 72+ diff)
 
 def reservoir3(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     hub.motion_sensor.reset_yaw_angle()
@@ -517,8 +521,9 @@ def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
     #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
 Run()
