@@ -303,8 +303,8 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     highspeed_pid(hub, robot, 51, 80, 165)
 
     #Go home
-    abs_turning(hub, robot, 250, 40)
-    pid(hub, robot, 80, 100, 250)
+    abs_turning(hub, robot, 270, 40)
+    pid(hub, robot, 80, 100, 270)
     abs_flip_turn(flipper, 0, 55, flipperInit)
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
