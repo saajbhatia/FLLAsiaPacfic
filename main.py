@@ -358,31 +358,35 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     abs_turning(hub, robot, 93 + diff, 50, 0)
 
     #used to be 1.35
-    pid(hub, robot, 5, 30, 93 + diff)
+    pid(hub, robot, 4.5, 10, 93 + diff)
+    flipper.run_for_degrees(55, 10)
 
-    flipper.run_for_degrees(100, 10)
-
-    highspeed_pid(hub, robot, 13, -50, 93 + diff)
-    abs_flip_turn(flipper, 0, 80, flipperInit)
-    pid(hub, robot, 9, -30, 93 + diff)
-    abs_turning(hub, robot, 135, 50)
+    pid(hub, robot, 4, -30, 93 + diff)
+    #abs_flip_turn(flipper, 0, 80, flipperInit)
+    pid(hub, robot, 8, -30, 93 + diff)
+    abs_turning(hub, robot, 125, 50)
 
     #back_flipper.run_for_degrees(80, 60)
-    abs_backflip_turn(back_flipper, 90, 30, back_flipperInit)
+    #abs_backflip_turn(back_flipper, 85, 30, back_flipperInit)
 
     #Go to car and flip first pid used to be 13.5cm
-    highspeed_pid(hub, robot, 10, -50, 135 + diff)
+    highspeed_pid(hub, robot, 13, -50, 120 + diff)
+    abs_backflip_turn(back_flipper, 85, 30, back_flipperInit)
+
+    highspeed_pid(hub, robot, 11, -50, 120 + diff)
     #waitUntilTap(hub)
-    back_flipper.run_for_degrees(-75, 30)
-    pid(hub, robot, 3, 30, 135)
-    back_flipper.run_for_degrees(-10, 10)
+    back_flipper.run_for_degrees(-40, 40)
+    back_flipper.run_for_degrees(40, 40)
+    pid(hub, robot, 5, 30, 120+diff)
+    back_flipper.set_stop_action('hold')
+    back_flipper.run_for_degrees(-100, 10)
 
     #Go to truck
-    highspeed_pid(hub, robot, 32, -80, 135 + diff)
+    highspeed_pid(hub, robot, 24, -80, 120 + diff)
 
     #Turn and truck
-    abs_turning(hub, robot, 72, 50)
-    highspeed_pid(hub, robot, 21, -80, 72+ diff)
+    abs_turning(hub, robot, 95, 50)
+    highspeed_pid(hub, robot, 26, -80, 95+ diff)
 
 
 #please do not have any code outside of functions
@@ -444,9 +448,9 @@ def Run():
     hub, robot, flipper, back_flipper = __init__()
     #powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #waitUntilTap(hub)
-    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    #reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
