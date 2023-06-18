@@ -249,7 +249,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     flipper.set_stop_action('brake')
     abs_flip_turn(flipper, 90, 50, flipperInit)
     #abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 54.5, 70, 0)
+    highspeed_pid(hub, robot, 55.25, 70, 0)
     #back_flipper.set_stop_action('coast')
     #abs_backflip_turn(back_flipper, 48, 30, back_flipperInit)
     #abs_backflip_turn(back_flipper, 69, 30, back_flipperInit)
@@ -450,7 +450,7 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     waitUntilTap(hub)
     windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
