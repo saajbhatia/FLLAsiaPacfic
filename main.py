@@ -176,13 +176,13 @@ def car_windmill(hub, robot, flipper, flipperInit):
 
     #Do Windmill
     highspeed_pid(hub, robot, 29, 80, 45)
-    pid(hub, robot, 5, -50, 45)
+    pid(hub, robot, 5, -20, 45)
     wait_for_seconds(0.5)
-    pid(hub, robot, 6, 30, 45)
-    pid(hub, robot, 5, -50, 45)
+    pid(hub, robot, 6, 50, 45)
+    pid(hub, robot, 5, -20, 45)
     wait_for_seconds(0.5)
-    pid(hub, robot, 6, 30, 45)
-    pid(hub, robot, 18, -50, 45)
+    pid(hub, robot, 6, 50, 45)
+    pid(hub, robot, 18, -20, 45)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
@@ -213,11 +213,11 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Do Windmill
     highspeed_pid(hub, robot, 29, 80, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 6.5, -50, 45)
-    pid(hub, robot, 6, 30, 45)
+    pid(hub, robot, 6.5, -15, 45)
+    pid(hub, robot, 6, 50, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 6, -50, 45)
-    pid(hub, robot, 8, 30, 45)
+    pid(hub, robot, 6, -15, 45)
+    pid(hub, robot, 8, 50, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 13, -50, 45)
 
@@ -258,7 +258,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     back_flipper.set_stop_action('hold')
     abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
     pid(hub, robot, 1, -30, -7)
-    abs_backflip_turn(back_flipper, 60, 50, back_flipperInit)
+    abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
 
     #Flip/do platform
     for i in range(3):
@@ -394,18 +394,20 @@ def mainmenu():
 
     waitUntilTap(hub)
     print("New Run:")
-
+    hub, robot, flipper, back_flipper = __init__()
     #Run 1 - TV Run - Missions Done: Powerplant, TV, Car, Windmill, Toy Factory
     powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Car: " + str(time.time()-transistion))
+    hub, robot, flipper, back_flipper = __init__()
     windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dino: " + str(time.time()-transistion))
+    hub, robot, flipper, back_flipper = __init__()
     dino_only_collect_water_run(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
@@ -413,19 +415,20 @@ def mainmenu():
     waitUntilTap(hub)
     hub.motion_sensor.reset_yaw_angle()
     print("Transition Time for Platform: " + str(time.time()-transistion))
+    hub, robot, flipper, back_flipper = __init__()
     plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dump: " + str(time.time()-transistion))
     #Reset everything for dump
     hub, robot, flipper, back_flipper = __init__()
-
     dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Reservoir: " + str(time.time()-transistion))
+    hub, robot, flipper, back_flipper = __init__()
     reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
@@ -441,9 +444,9 @@ def Run():
     hub, robot, flipper, back_flipper = __init__()
     #powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #waitUntilTap(hub)
-    #windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
@@ -463,4 +466,4 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-mainmenu()
+Run()
