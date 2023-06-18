@@ -256,13 +256,17 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #pid(hub, robot, 0.25, 30, 0)
     abs_turning(hub, robot, -7, 30, 0)
     back_flipper.set_stop_action('hold')
-    abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
-    pid(hub, robot, 1, -30, -7)
-    abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
+    abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
+    pid(hub, robot, 1.5, -30, -7)
+    abs_backflip_turn(back_flipper, 30, 50, back_flipperInit)
 
+    #New - go forward and lift back flipper
+    pid(hub, robot, 1.5, 30, -7)
+    abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
+    
     #Flip/do platform
     for i in range(3):
-        abs_flip_turn(flipper, 60, 90, flipperInit)
+        abs_flip_turn(flipper, 50, 90, flipperInit)
         abs_flip_turn(flipper, 90, 90, flipperInit)
 
     back_flipper.set_stop_action('brake')
@@ -288,8 +292,8 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     highspeed_pid(hub, robot, 24, -30, 180)
     abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
 
-    #Go forward
-    highspeed_pid(hub, robot, 20, 30, 180)
+    #Go forward og 20
+    highspeed_pid(hub, robot, 22, 30, 180)
     abs_turning(hub, robot, 195, 40)
 
     #Catch nrg
@@ -446,11 +450,11 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    #powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    #waitUntilTap(hub)
-    #windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    waitUntilTap(hub)
+    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
