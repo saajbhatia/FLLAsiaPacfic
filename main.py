@@ -263,7 +263,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #New - go forward and lift back flipper
     pid(hub, robot, 1.5, 30, -7)
     abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
-    
+
     #Flip/do platform
     for i in range(3):
         abs_flip_turn(flipper, 50, 90, flipperInit)
@@ -310,7 +310,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 
 def dump(hub, robot, flipper, flipperInit):
     #abs_turning(hub, robot, 3, 30)
-    highspeed_pid(hub, robot, 74, 80, 3)
+    highspeed_pid(hub, robot, 74.25, 80, 3)
     flipper.run_for_rotations(0.15, 50)
     flipper.run_for_rotations(0.15, -50)
     pid(hub, robot, 3, -40, 0)
@@ -323,12 +323,12 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     flipper.set_stop_action("hold")
     abs_turning(hub, robot, -45, 30, 0)
     #used to be 29.5
-    pid(hub, robot, 28, 50, -45)
+    pid(hub, robot, 19, 50, -45)
     abs_turning(hub, robot, 0, 30, 0)
     abs_flip_turn(flipper, 98, 50, flipperInit)
     #abs_turning(hub, robot, 0, 30)
-    pid(hub, robot, 8, 40, 0)
-    pid(hub, robot, 5, 20, 0)
+    pid(hub, robot, 12, 40, 0)
+    pid(hub, robot, 9, 20, 0)
     wait_for_seconds(0.5)
     flipper.set_stop_action("coast")
     abs_flip_turn(flipper, 87, 50, flipperInit)
@@ -389,8 +389,8 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     highspeed_pid(hub, robot, 24, -80, 120 + diff)
 
     #Turn and truck
-    abs_turning(hub, robot, 95, 50)
-    highspeed_pid(hub, robot, 26, -80, 95+ diff)
+    abs_turning(hub, robot, 77, 50)
+    highspeed_pid(hub, robot, 26, -80, 77+ diff)
 
 
 #please do not have any code outside of functions
@@ -450,7 +450,7 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     waitUntilTap(hub)
     windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
@@ -475,3 +475,4 @@ def Run():
     print(time.time()-currentTime)
 
 Run()
+quit()
