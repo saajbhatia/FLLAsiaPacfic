@@ -151,12 +151,12 @@ def powerplant_and_tv(hub, robot, flipper, flipperInit, back_flipper, back_flipp
 def car_windmill(hub, robot, flipper, flipperInit):
     hub.motion_sensor.reset_yaw_angle()
 
-    abs_turning(hub, robot, -46, 30)
+    abs_turning(hub, robot, -47, 30)
 
     #Dump + Grab
-    highspeed_pid(hub, robot, 65, 80, -46)
+    highspeed_pid(hub, robot, 65, 80, -47)
     abs_flip_turn(flipper, 90, 30, flipperInit)
-    highspeed_pid(hub, robot, 18, 80, -46)
+    highspeed_pid(hub, robot, 18, 80, -47)
 
     #Do Car
     abs_turning(hub, robot, -21, 30)
@@ -217,9 +217,10 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     pid(hub, robot, 6, 50, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -15, 45)
+    wait_for_seconds(0.5)
     pid(hub, robot, 8, 50, 45)
     wait_for_seconds(0.1)
-    pid(hub, robot, 13, -50, 45)
+    pid(hub, robot, 15, -50, 45)
 
     #Put units on floor
     left_abs_turning(hub, robot, -145, 50)
@@ -286,7 +287,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    abs_backflip_turn(back_flipper, -30, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -35, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
@@ -323,7 +324,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     flipper.set_stop_action("hold")
     abs_turning(hub, robot, -45, 30, 0)
     #used to be 29.5
-    pid(hub, robot, 19, 50, -45)
+    pid(hub, robot, 21, 50, -45)
     abs_turning(hub, robot, 0, 30, 0)
     abs_flip_turn(flipper, 98, 50, flipperInit)
     #abs_turning(hub, robot, 0, 30)
@@ -344,8 +345,8 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     hub.motion_sensor.reset_yaw_angle()
 
     #Turn and go parallel to hydro dam
-    abs_turning(hub, robot, -45, 50)
-    highspeed_pid(hub, robot, 75, 100, -45)
+    abs_turning(hub, robot, -45, 30)
+    highspeed_pid(hub, robot, 75, 80, -45)
 
     #Turn to 0 and put innovation thing
     abs_turning(hub, robot, 0, 50)
@@ -450,11 +451,11 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    waitUntilTap(hub)
-    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #waitUntilTap(hub)
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
