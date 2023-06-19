@@ -285,7 +285,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    abs_backflip_turn(back_flipper, -35, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, -45, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
@@ -365,7 +365,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     pid(hub, robot, 12, -30, 93 + diff)
     abs_turning(hub, robot, 125, 30)
 
-    #Go to car and flip 
+    #Go to car and flip
     highspeed_pid(hub, robot, 13.5, -50, 120 + diff)
     abs_backflip_turn(back_flipper, 100, 30, back_flipperInit)
 
@@ -466,5 +466,5 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-Run()
+mainmenu()
 quit()
