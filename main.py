@@ -364,7 +364,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #used to be 1.35
     pid(hub, robot, 4.5, 10, 93 + diff)
-    flipper.run_for_degrees(55, 10)
+    flipper.run_for_degrees(50, 10)
 
     pid(hub, robot, 4, -30, 93 + diff)
     #abs_flip_turn(flipper, 0, 80, flipperInit)
@@ -376,18 +376,17 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #Go to car and flip first pid used to be 13.5cm
     highspeed_pid(hub, robot, 13, -50, 120 + diff)
-    abs_backflip_turn(back_flipper, 85, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 100, 30, back_flipperInit)
 
-    highspeed_pid(hub, robot, 11, -50, 120 + diff)
-    #waitUntilTap(hub)
+    highspeed_pid(hub, robot, 12, -50, 120 + diff)
     back_flipper.run_for_degrees(-40, 40)
     back_flipper.run_for_degrees(40, 40)
-    pid(hub, robot, 5, 30, 120+diff)
+    pid(hub, robot, 710 30, 120+diff)
     back_flipper.set_stop_action('hold')
     back_flipper.run_for_degrees(-100, 10)
 
     #Go to truck
-    highspeed_pid(hub, robot, 24, -80, 120 + diff)
+    highspeed_pid(hub, robot, 26, -80, 120 + diff)
 
     #Turn and truck
     abs_turning(hub, robot, 77, 50)
