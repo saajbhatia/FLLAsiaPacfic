@@ -105,17 +105,21 @@ def __init__():
     flipper.set_stop_action('brake')
 
     back_flipper = Motor('A')
-    back_flipper.set_stop_action('coast')
+    back_flipper.set_stop_action('brake')
+    back_flipper.set_degrees_counted(0)
     return hub, robot, flipper, back_flipper
 
 def waitUntilTap(hub):
     hub.right_button.wait_until_pressed()
 
 def abs_flip_turn(flipper, correct, speed, flipperInit):
-    flipper.run_to_position(calDiffFlip(flipperInit+correct), 'shortest path', speed)
+    flipper.run_to_position(correct, 'shortest path', speed)
 
 def abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
-    back_flipper.run_to_position(calDiffFlip(back_flipperInit+correct), 'shortest path', speed)
+    back_flipper.run_to_position(correct, 'shortest path', speed)
+
+def no_diff_abs_backflip_turn(back_flipper, correct, speed, back_flipperInit):
+    back_flipper.run_to_position(correct, 'shortest path', speed)
 
 
 def powerplant_and_tv(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
@@ -211,15 +215,16 @@ def windmill(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 45, 30)
 
     #Do Windmill
-    highspeed_pid(hub, robot, 29, 80, 45)
+    highspeed_pid(hub, robot, 28, 80, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6.5, -15, 45)
+    wait_for_seconds(0.2)
     pid(hub, robot, 6, 50, 45)
     wait_for_seconds(0.1)
     pid(hub, robot, 6, -15, 45)
     wait_for_seconds(0.5)
     pid(hub, robot, 8, 50, 45)
-    wait_for_seconds(0.1)
+    wait_for_seconds(0.2)
     pid(hub, robot, 15, -50, 45)
 
     #Put units on floor
@@ -240,38 +245,33 @@ def dino_only_collect_water_run(hub, robot, flipper, flipperInit, back_flipper, 
     flipper.run_for_degrees(85, 60)
     fast_turning(hub, robot, 0, 50)
     highspeed_pid(hub, robot, 40, 100, 0)
-    back_flipper.set_stop_action('coast')
+    #back_flipper.set_stop_action('coast')
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     abs_flip_turn(flipper, 0, 30, flipperInit)
 
 def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Go to platform
-    back_flipper.set_stop_action('brake')
+    back_flipper.set_stop_action('hold')
     flipper.set_stop_action('brake')
     abs_flip_turn(flipper, 90, 50, flipperInit)
+    abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
     highspeed_pid(hub, robot, 55.25, 70, 0)
     abs_turning(hub, robot, -7, 30, 0)
-    back_flipper.set_stop_action('hold')
 
-    #Put back flip down, go back, do hydro dam
-    abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
-    pid(hub, robot, 1.5, -30, -7)
-    abs_backflip_turn(back_flipper, 30, 50, back_flipperInit)
+    #Put back flip up, do hydro dam
+    abs_backflip_turn(back_flipper, 65, 50, back_flipperInit)
 
-    #Go forward and lift back flipper
-    pid(hub, robot, 1.5, 30, -7)
-    abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
 
     #Flip/do platform
     for i in range(3):
         abs_flip_turn(flipper, 50, 90, flipperInit)
         abs_flip_turn(flipper, 90, 90, flipperInit)
 
-    back_flipper.set_stop_action('brake')
-
+ 
     #Go to solar farm energy units
-    abs_turning(hub, robot, 39, 50)
+    pid(hub, robot, 1, 30, 0)
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
     highspeed_pid(hub, robot, 30, 80, 39)
     abs_turning(hub, robot, 90, 50)
@@ -285,11 +285,12 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4, -40, 90)
     abs_turning(hub, robot, 180, 40)
-    abs_backflip_turn(back_flipper, -45, 30, back_flipperInit)
+    back_flipper.set_degrees_counted(0)
+    abs_backflip_turn(back_flipper, 300, 30, back_flipperInit)
 
     #Do high five and collect units
     highspeed_pid(hub, robot, 24, -30, 180)
-    abs_backflip_turn(back_flipper, -65, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
     #Go forward
     highspeed_pid(hub, robot, 21, 30, 180)
@@ -298,7 +299,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     #Catch nrg
     abs_flip_turn(flipper, 80, 50, flipperInit)
     abs_turning(hub, robot, 165, 50)
-    highspeed_pid(hub, robot, 51, 80, 165)
+    highspeed_pid(hub, robot, 49, 80, 165)
 
     #Go home
     abs_turning(hub, robot, 270, 40)
@@ -332,7 +333,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     abs_flip_turn(flipper, 87, 50, flipperInit)
     #abs_turning(hub, robot, 3, 30, 0)
     pid(hub, robot, 5, -10, 0)
-    highspeed_pid(hub, robot, 36, -85, 0)
+    highspeed_pid(hub, robot, 36, -100, 0)
     #abs_flip_turn(flipper, 0, 50, flipperInit)
 
 
@@ -351,38 +352,42 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     abs_turning(hub, robot, 50, 30)
 
     highspeed_pid(hub, robot, 18, 80, 50)
-    highspeed_pid(hub, robot, 10, -40, 50)
+    highspeed_pid(hub, robot, 12, -40, 50)
 
     diff = 50 - hub.motion_sensor.get_yaw_angle()
     hub.motion_sensor.reset_yaw_angle()
 
     #Turn and place hydro units
-    abs_turning(hub, robot, 93 + diff, 30, 0)
-    pid(hub, robot, 4.5, 10, 93 + diff)
+    abs_turning(hub, robot, 90 + diff, 30, 0)
+    pid(hub, robot, 4.5, 10, 90 + diff)
     flipper.run_for_degrees(50, 10)
 
     #Go back to car and turn
-    pid(hub, robot, 12, -30, 93 + diff)
+    pid(hub, robot, 12, -30, 90 + diff)
     abs_turning(hub, robot, 125, 30)
 
-    #Go to car and flip
+    #Go to car and place flip down
     highspeed_pid(hub, robot, 13.5, -50, 120 + diff)
     abs_backflip_turn(back_flipper, 100, 30, back_flipperInit)
 
-    highspeed_pid(hub, robot, 11, -50, 120 + diff)
-    #waitUntilTap(hub)
-    back_flipper.run_for_degrees(-50, 40)
-    back_flipper.run_for_degrees(50, 40)
-    pid(hub, robot, 10, 30, 120+diff)
+    #Go to car and do car
+    highspeed_pid(hub, robot, 12, -50, 120 + diff)
+    back_flipper.run_for_degrees(-60, 40)
+    back_flipper.run_for_degrees(60, 40)
+
+    #Come back from car
+    pid(hub, robot, 15, 30, 120+diff)
+    abs_turning(hub, robot, 140, 30)
     back_flipper.set_stop_action('hold')
     back_flipper.run_for_degrees(-100, 10)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
 
     #Go to truck
-    highspeed_pid(hub, robot, 32, -80, 120 + diff)
+    highspeed_pid(hub, robot, 30, -80, 140 + diff)
 
     #Turn and truck
     abs_turning(hub, robot, 77, 50)
-    highspeed_pid(hub, robot, 26, -80, 77+ diff)
+    highspeed_pid(hub, robot, 30, -80, 77+ diff)
 
 
 #please do not have any code outside of functions
@@ -433,9 +438,13 @@ def mainmenu():
     print(time.time()-currentTime)
 
 def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
-    for i in range(3):
-        abs_flip_turn(flipper, -25, 90, flipperInit)
-        abs_flip_turn(flipper, 0, 90, flipperInit)
+    back_flipper.set_stop_action('hold')
+    no_diff_abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
+    waitUntilTap(hub)
+    no_diff_abs_backflip_turn(back_flipper, 255, 30, back_flipperInit)
+    waitUntilTap(hub)   
+    no_diff_abs_backflip_turn(back_flipper, 310, 30, back_flipperInit)
+
 
 
 #Change this to run the thing you want to run.
@@ -444,9 +453,9 @@ def Run():
     hub, robot, flipper, back_flipper = __init__()
     #dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #waitUntilTap(hub)
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    #plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
@@ -466,5 +475,5 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-mainmenu()
+Run()
 quit()
