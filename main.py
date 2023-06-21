@@ -368,26 +368,26 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #Go to car and place flip down
     highspeed_pid(hub, robot, 13.5, -50, 120 + diff)
-    abs_backflip_turn(back_flipper, 100, 30, back_flipperInit)
+    abs_backflip_turn(back_flipper, 120, 30, back_flipperInit)
 
     #Go to car and do car
-    highspeed_pid(hub, robot, 12, -50, 120 + diff)
+    highspeed_pid(hub, robot, 13, -50, 120 + diff)
     back_flipper.run_for_degrees(-60, 40)
     back_flipper.run_for_degrees(60, 40)
 
     #Come back from car
-    pid(hub, robot, 15, 30, 120+diff)
+    pid(hub, robot, 16, 30, 120+diff)
     abs_turning(hub, robot, 140, 30)
     back_flipper.set_stop_action('hold')
     back_flipper.run_for_degrees(-100, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
 
     #Go to truck
-    highspeed_pid(hub, robot, 30, -80, 140 + diff)
+    highspeed_pid(hub, robot, 30, -50, 140 + diff)
 
     #Turn and truck
-    abs_turning(hub, robot, 77, 50)
-    highspeed_pid(hub, robot, 30, -80, 77+ diff)
+    abs_turning(hub, robot, 77, 30)
+    highspeed_pid(hub, robot, 30, -50, 77+ diff)
 
 
 #please do not have any code outside of functions
@@ -437,6 +437,7 @@ def mainmenu():
     reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
+
 def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     back_flipper.set_stop_action('hold')
     no_diff_abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
@@ -455,7 +456,7 @@ def Run():
     #waitUntilTap(hub)
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     '''
     flipper.set_degrees_counted(0)
     print("Start: " + str(flipper.get_degrees_counted()))
@@ -475,5 +476,5 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-Run()
+mainmenu()
 quit()
