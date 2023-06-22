@@ -267,7 +267,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
         abs_flip_turn(flipper, 50, 90, flipperInit)
         abs_flip_turn(flipper, 90, 90, flipperInit)
 
- 
+
     #Go to solar farm energy units
     pid(hub, robot, 1, 30, 0)
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
@@ -278,7 +278,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     pid(hub, robot, 1, -30, 90)
 
     #Put back flip down to collect cylinders
-    abs_backflip_turn(back_flipper, 255, 30, back_flipperInit)
+    back_flipper.run_to_position(255, "counterclockwise", 30)
     highspeed_pid(hub, robot, 33, 80, 90)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
@@ -322,7 +322,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     flipper.set_stop_action("hold")
     abs_turning(hub, robot, -45, 30, 0)
     #used to be 29.5
-    pid(hub, robot, 20.75, 30, -45)
+    pid(hub, robot, 21, 30, -45)
     abs_turning(hub, robot, 0, 30, 0)
     abs_flip_turn(flipper, 98, 50, flipperInit)
     #abs_turning(hub, robot, 0, 30)
@@ -364,7 +364,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     flipper.run_for_degrees(50, 10)
 
     #Go back to car and turn
-    #NOTE: this may need to be shortened by a cm if the backflipper gets stuck 
+    #NOTE: this may need to be shortened by a cm if the backflipper gets stuck
     pid(hub, robot, 5, -30, 90 + diff)
     abs_turning(hub, robot, 115, 30)
     abs_flip_turn(flipper, 0, 50, flipperInit)
@@ -374,8 +374,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #Go to car and do car
     highspeed_pid(hub, robot, 14, -50, 115 + diff)
-    abs_backflip_turn(back_flipper, 90, 80, back_flipperInit)
-    
+    abs_backflip_turn(back_flipper, 50, 80, back_flipperInit)
     abs_backflip_turn(back_flipper, 110, 80, back_flipperInit)
 
     #Come back from car
@@ -388,7 +387,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     abs_turning(hub, robot, 77, 50)
     highspeed_pid(hub, robot, 23, -70, 77 + diff)
     return
-    
+
 
 
 #please do not have any code outside of functions
@@ -444,7 +443,7 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     no_diff_abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
     waitUntilTap(hub)
     no_diff_abs_backflip_turn(back_flipper, 255, 30, back_flipperInit)
-    waitUntilTap(hub)   
+    waitUntilTap(hub)
     no_diff_abs_backflip_turn(back_flipper, 310, 30, back_flipperInit)
 
 
@@ -479,4 +478,4 @@ def Run():
 
 #Run()
 mainmenu()
-quit()
+#quit()
