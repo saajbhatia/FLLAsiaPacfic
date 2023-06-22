@@ -477,6 +477,6 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-Run()
-#mainmenu()
-#quit()
+#Run()
+mainmenu()
+quit()
