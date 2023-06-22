@@ -340,7 +340,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
 #THIS CODE DOES THE ORIGINAL RES STUFF BUT ALSO THE CAR
 #Latest 6/6
 def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
-    hub.motion_sensor.reset_yaw_angle()
+    #hub.motion_sensor.reset_yaw_angle()
 
     #Turn and go parallel to hydro dam
     abs_turning(hub, robot, -45, 30)
@@ -355,6 +355,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     highspeed_pid(hub, robot, 12, -40, 50)
 
     diff = 50 - hub.motion_sensor.get_yaw_angle()
+    print ("diff is" + str(diff))
     hub.motion_sensor.reset_yaw_angle()
 
     #Turn and place hydro units
@@ -363,31 +364,31 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
     flipper.run_for_degrees(50, 10)
 
     #Go back to car and turn
-    pid(hub, robot, 12, -30, 90 + diff)
-    abs_turning(hub, robot, 125, 30)
-
+    #NOTE: this may need to be shortened by a cm if the backflipper gets stuck 
+    pid(hub, robot, 5, -30, 90 + diff)
+    abs_turning(hub, robot, 115, 30)
+    abs_flip_turn(flipper, 0, 50, flipperInit)
     #Go to car and place flip down
-    highspeed_pid(hub, robot, 13.5, -50, 120 + diff)
-    abs_backflip_turn(back_flipper, 120, 30, back_flipperInit)
+    highspeed_pid(hub, robot, 18.5, -50, 115 + diff)
+    abs_backflip_turn(back_flipper, 115, 30, back_flipperInit)
 
     #Go to car and do car
-    highspeed_pid(hub, robot, 13, -50, 120 + diff)
-    back_flipper.run_for_degrees(-60, 40)
-    back_flipper.run_for_degrees(60, 40)
+    highspeed_pid(hub, robot, 14, -50, 115 + diff)
+    abs_backflip_turn(back_flipper, 90, 80, back_flipperInit)
+    
+    abs_backflip_turn(back_flipper, 110, 80, back_flipperInit)
 
     #Come back from car
-    pid(hub, robot, 16, 30, 120+diff)
-    abs_turning(hub, robot, 140, 30)
-    back_flipper.set_stop_action('hold')
-    back_flipper.run_for_degrees(-100, 10)
-    abs_flip_turn(flipper, 0, 50, flipperInit)
-
+    pid(hub, robot, 5.5, 30, 115+diff)
+    abs_backflip_turn(back_flipper, 0, 80, back_flipperInit)
+    abs_turning(hub, robot, 135, 30)
     #Go to truck
-    highspeed_pid(hub, robot, 30, -50, 140 + diff)
-
+    highspeed_pid(hub, robot, 25, -70, 135 + diff)
     #Turn and truck
-    abs_turning(hub, robot, 77, 30)
-    highspeed_pid(hub, robot, 30, -50, 77+ diff)
+    abs_turning(hub, robot, 77, 50)
+    highspeed_pid(hub, robot, 23, -70, 77 + diff)
+    return
+    
 
 
 #please do not have any code outside of functions
@@ -476,5 +477,6 @@ def Run():
         '''
     print(time.time()-currentTime)
 
-mainmenu()
-quit()
+Run()
+#mainmenu()
+#quit()
