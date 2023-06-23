@@ -374,7 +374,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #Go to car and do car
     highspeed_pid(hub, robot, 14, -50, 115 + diff)
-    abs_backflip_turn(back_flipper, 50, 80, back_flipperInit)
+    abs_backflip_turn(back_flipper, 50, 30, back_flipperInit)
     abs_backflip_turn(back_flipper, 110, 80, back_flipperInit)
 
     #Come back from car
@@ -449,9 +449,9 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
-#Run()
-mainmenu()
+Run()
+#mainmenu()
 quit()
