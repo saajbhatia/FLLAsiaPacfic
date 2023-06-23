@@ -255,11 +255,12 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     flipper.set_stop_action('brake')
     abs_flip_turn(flipper, 90, 50, flipperInit)
     abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 55.25, 70, 0)
+    highspeed_pid(hub, robot, 55, 70, 0)
     abs_turning(hub, robot, -7, 30, 0)
 
     #Put back flip up, do hydro dam
     abs_backflip_turn(back_flipper, 65, 50, back_flipperInit)
+    abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
 
 
     #Flip/do platform
@@ -269,11 +270,10 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 
 
     #Go to solar farm energy units
-    pid(hub, robot, 1, 30, 0)
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
-    highspeed_pid(hub, robot, 30, 80, 39)
+    abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
+    highspeed_pid(hub, robot, 30.5, 80, 39)
     abs_turning(hub, robot, 90, 50)
     pid(hub, robot, 1, -30, 90)
 
@@ -283,7 +283,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
-    pid(hub, robot, 4, -40, 90)
+    pid(hub, robot, 4.5, -40, 90)
     abs_turning(hub, robot, 180, 40)
     back_flipper.set_degrees_counted(0)
     abs_backflip_turn(back_flipper, 300, 30, back_flipperInit)
@@ -422,12 +422,15 @@ def mainmenu():
     print("Transition Time for Platform: " + str(time.time()-transistion))
     hub, robot, flipper, back_flipper = __init__()
     plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    print("Run time for Platform: " + str(time.time()-transistion))
+
     transistion = time.time()
     waitUntilTap(hub)
     print("Transition Time for Dump: " + str(time.time()-transistion))
     #Reset everything for dump
     hub, robot, flipper, back_flipper = __init__()
     dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    print("Run time for Dump: " + str(time.time()-transistion))
 
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
     transistion = time.time()
@@ -439,43 +442,35 @@ def mainmenu():
 
 
 def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
-    back_flipper.set_stop_action('hold')
-    no_diff_abs_backflip_turn(back_flipper, 70, 30, back_flipperInit)
-    waitUntilTap(hub)
-    no_diff_abs_backflip_turn(back_flipper, 255, 30, back_flipperInit)
-    waitUntilTap(hub)
-    no_diff_abs_backflip_turn(back_flipper, 310, 30, back_flipperInit)
-
-
-
+    highspeed_pid(hub, robot, 50, 30, 0)
+    abs_turning(hub, robot, 90, 30, 0)
+    abs_turning(hub, robot, 0, 30, 0)
 #Change this to run the thing you want to run.
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    #dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    #waitUntilTap(hub)
-    #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    #test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    '''
-    flipper.set_degrees_counted(0)
-    print("Start: " + str(flipper.get_degrees_counted()))
-    for i in range(10):
-        flipper.run_to_degrees_counted(-50, 80)
-        print("Up: " + str(flipper.get_degrees_counted()))
-        deg = flipper.get_degrees_counted()
-        flipper.set_degrees_counted(0)
-        flipper.run_to_degrees_counted(abs(deg), 80)
-        print("Down: " + str(flipper.get_degrees_counted()))
-    '''
-    '''for i in range(3):
-        abs_flip_turn(flipper, 0, 90, 0)
-        print("Up: " + str(flipper.get_degrees_counted()))
-        abs_flip_turn(flipper, 0, 90, 0)
-        print("Down: " + str(flipper.get_degrees_counted()))
-        '''
-    print(time.time()-currentTime)
+    #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
+    runtime = time.time()
+    waitUntilTap(hub)
+    print("Transition Time for Dino: " + str(time.time()-runtime))
+    hub, robot, flipper, back_flipper = __init__()
+    dino_only_collect_water_run(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
 
+    #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
+    runtime = time.time()
+    waitUntilTap(hub)
+    hub.motion_sensor.reset_yaw_angle()
+    hub, robot, flipper, back_flipper = __init__()
+    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    print("Run time for Platform: " + str(time.time()-runtime))
+    runtime = time.time()
+    waitUntilTap(hub)
+    #Reset everything for dump
+    hub, robot, flipper, back_flipper = __init__()
+    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    print("Run time for Dump: " + str(time.time()-runtime))
+
+    print(time.time()-currentTime)
 #Run()
 mainmenu()
-#quit()
+quit()
