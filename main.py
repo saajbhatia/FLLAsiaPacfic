@@ -431,7 +431,6 @@ def mainmenu():
     hub, robot, flipper, back_flipper = __init__()
     dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print("Run time for Dump: " + str(time.time()-transistion))
-
     #Run 4 - Reservoir Run - Missions Done: Hook up water units, drop off innovation model
     transistion = time.time()
     waitUntilTap(hub)
@@ -442,35 +441,17 @@ def mainmenu():
 
 
 def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
-    highspeed_pid(hub, robot, 50, 30, 0)
-    abs_turning(hub, robot, 90, 30, 0)
-    abs_turning(hub, robot, 0, 30, 0)
+    for x in range(10):
+        powerplant_and_tv(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+        waitUntilTap(hub)
+
 #Change this to run the thing you want to run.
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    #Run 2 - Dino Run - Missions Done: Bring Dino Home, Get Water Unit
-    runtime = time.time()
-    waitUntilTap(hub)
-    print("Transition Time for Dino: " + str(time.time()-runtime))
-    hub, robot, flipper, back_flipper = __init__()
-    dino_only_collect_water_run(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-
-    #Run 3 - Platform Run - Missions Done: Hydro Dam, Oil Platform, Dump Units into White Box, Solar Farm, Highfive, Collect Water Units
-    runtime = time.time()
-    waitUntilTap(hub)
-    hub.motion_sensor.reset_yaw_angle()
-    hub, robot, flipper, back_flipper = __init__()
-    plat(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    print("Run time for Platform: " + str(time.time()-runtime))
-    runtime = time.time()
-    waitUntilTap(hub)
-    #Reset everything for dump
-    hub, robot, flipper, back_flipper = __init__()
-    dumpAndTruck(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
-    print("Run time for Dump: " + str(time.time()-runtime))
-
+    test(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
+
 #Run()
 mainmenu()
 quit()
