@@ -3,7 +3,7 @@ from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
 import math
 import time
-
+#hi
 def highspeed_pid(hub, robot, cm, speed, start_angle):
     motor = Motor('F')
     motor.set_degrees_counted(0)
@@ -255,7 +255,7 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     flipper.set_stop_action('brake')
     abs_flip_turn(flipper, 90, 50, flipperInit)
     abs_backflip_turn(back_flipper, 80, 30, back_flipperInit)
-    highspeed_pid(hub, robot, 55, 70, 0)
+    highspeed_pid(hub, robot, 52.5, 70, 0)
     abs_turning(hub, robot, -7, 30, 0)
 
     #Put back flip up, do hydro dam
@@ -273,17 +273,19 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_turning(hub, robot, 39, 50)
     abs_flip_turn(flipper, 0, 50, flipperInit)
     abs_backflip_turn(back_flipper, 0, 50, back_flipperInit)
-    highspeed_pid(hub, robot, 30.5, 80, 39)
+    highspeed_pid(hub, robot, 30, 80, 39)
     abs_turning(hub, robot, 90, 50)
     pid(hub, robot, 1, -30, 90)
 
     #Put back flip down to collect cylinders
     back_flipper.run_to_position(255, "counterclockwise", 30)
-    highspeed_pid(hub, robot, 33, 80, 90)
+    highspeed_pid(hub, robot, 32, 80, 90)
 
     #Code for HIGH FIVE and NRG collection and HYDRO DAM collection
-    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
     pid(hub, robot, 4.5, -40, 90)
+    abs_turning(hub, robot, 125, 10)
+    abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
+    pid(hub, robot, 4, 40, 125)
     abs_turning(hub, robot, 180, 40)
     back_flipper.set_degrees_counted(0)
     abs_backflip_turn(back_flipper, 300, 30, back_flipperInit)
@@ -293,11 +295,11 @@ def plat(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
     abs_backflip_turn(back_flipper, 0, 30, back_flipperInit)
 
     #Go forward
-    highspeed_pid(hub, robot, 21, 30, 180)
-    abs_turning(hub, robot, 200, 40)
+    highspeed_pid(hub, robot, 21.5, 30, 180)
+    abs_turning(hub, robot, 205, 40)
 
     #Catch nrg
-    abs_flip_turn(flipper, 80, 50, flipperInit)
+    abs_flip_turn(flipper, 80, 30, flipperInit)
     abs_turning(hub, robot, 165, 50)
     highspeed_pid(hub, robot, 49, 80, 165)
 
@@ -312,7 +314,7 @@ def dump(hub, robot, flipper, flipperInit):
     highspeed_pid(hub, robot, 74.25, 80, 3)
     flipper.run_for_rotations(0.15, 50)
     flipper.run_for_rotations(0.15, -50)
-    pid(hub, robot, 3, -40, 0)
+    pid(hub, robot, 3.25, -40, 0)
     abs_flip_turn(flipper, 90, 50, flipperInit)
     pid(hub, robot, 69, -80, 10)
     abs_flip_turn(flipper, 0, 50, flipperInit)
@@ -322,7 +324,7 @@ def dumpAndTruck(hub, robot, flipper, flipperInit, back_flipper, back_flipperIni
     flipper.set_stop_action("hold")
     abs_turning(hub, robot, -45, 30, 0)
     #used to be 29.5
-    pid(hub, robot, 21, 30, -45)
+    pid(hub, robot, 22, 30, -45)
     abs_turning(hub, robot, 0, 30, 0)
     abs_flip_turn(flipper, 98, 50, flipperInit)
     #abs_turning(hub, robot, 0, 30)
@@ -360,7 +362,7 @@ def reservoir2(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit)
 
     #Turn and place hydro units
     abs_turning(hub, robot, 90 + diff, 30, 0)
-    pid(hub, robot, 4.5, 10, 90 + diff)
+    pid(hub, robot, 6, 10, 90 + diff)
     flipper.run_for_degrees(50, 10)
 
     #Go back to car and turn
@@ -449,9 +451,9 @@ def test(hub, robot, flipper, flipperInit, back_flipper, back_flipperInit):
 def Run():
     currentTime = time.time()
     hub, robot, flipper, back_flipper = __init__()
-    reservoir2(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
+    windmill(hub, robot, flipper, int(flipper.get_position()), back_flipper, int(back_flipper.get_position()))
     print(time.time()-currentTime)
 
-Run()
-#mainmenu()
+#Run()
+mainmenu()
 quit()
